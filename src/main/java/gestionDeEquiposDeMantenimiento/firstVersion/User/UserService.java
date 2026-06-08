@@ -1,0 +1,83 @@
+
+package gestionDeEquiposDeMantenimiento.firstVersion.User;
+
+import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolModel;
+import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolRepository;
+import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserResponseDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserCreateDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserUpdateDTO;
+import java.util.List;
+import java.util.Optional;
+import javax.management.RuntimeErrorException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+    
+    private final UserRepository userRepository;
+    private final RolRepository rolRepository;
+    
+    public List<UserResponseDTO> getAllUsers() {
+        List<UserModel> users = userRepository.findAll();
+        return users.stream().map(user -> new UserResponseDTO(user.getIdUsuario(), 
+                user.getName(), user.getLastName(),user.getActive(), user.getCargo()
+        ))
+        .toList();
+    }
+    
+    
+    public UserResponseDTO saveUser(UserCreateDTO request) {
+        RolModel rol = rolRepository.findById(request.getIdRol())
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+        UserModel user = new UserModel();
+        user.setActive(request.getActive());
+        user.setCargo(request.getCargo());
+        user.setDocumento(request.getDocumento());
+        user.setEmail(request.getEmail());
+        user.setLastName(request.getLastName());
+        user.setName(request.getName());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setRol(rol);
+        
+        UserModel savedUser = userRepository.save(user);
+        
+        return mapToResponse(savedUser);
+    }
+    
+    private UserResponseDTO mapToResponse(UserModel user) {
+        return new UserResponseDTO(
+                user.getIdUsuario(),
+                user.getName(),
+                user.getEmail(),
+                user.getActive(),
+                user.getCargo()
+        );
+    }
+    
+    
+    public UserModel editarUser(UserUpdateDTO request, Long idUser) {
+        UserModel user = userRepository.findById(idUser).get();
+        RolModel rol = rolRepository.findById(request.getIdRol())
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+        
+        user.setActive(request.getActive());
+        user.setCargo(request.getCargo());
+        user.setEmail(request.getEmail());
+        user.setRol(rol);
+
+        return userRepository.save(user);
+    }
+    
+    public Boolean deleteUser(Long idUser) {
+        try {
+            userRepository.deleteById(idUser);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    
+}
