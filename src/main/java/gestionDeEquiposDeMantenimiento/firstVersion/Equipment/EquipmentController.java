@@ -1,6 +1,7 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.Equipment;
 
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentUpdateDTO;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class EquipmentController {
      }
      
      @PutMapping(path = "/update/{id}")
-     public EquipmentModel updateEquipmentById(@RequestBody EquipmentModel request, @PathVariable Long id) {
+     public EquipmentModel updateEquipmentById(@RequestBody EquipmentUpdateDTO request, @PathVariable Long id) {
          return this.EquipmentService.updateEquipment(request, id);
      }
      
