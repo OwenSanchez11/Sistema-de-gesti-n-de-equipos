@@ -28,6 +28,11 @@ public class UserController {
         return this.userService.getAllUsers();
     }
     
+    @GetMapping(path = "/getUser/{idUser}")
+    public UserResponseDTO getUserById(@PathVariable Long idUser) {
+        return this.userService.getById(idUser);
+    }
+    
     @PostMapping(path = "/createUser")
     public UserResponseDTO createUser(@RequestBody UserCreateDTO request) {
         return this.userService.saveUser(request);
