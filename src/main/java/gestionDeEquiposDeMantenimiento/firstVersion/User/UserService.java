@@ -27,6 +27,16 @@ public class UserService {
         .toList();
     }
     
+    public UserResponseDTO getById(Long idUser) {
+        UserModel user = userRepository.findById(idUser).get();
+        
+        return new UserResponseDTO(user.getIdUsuario(), 
+                user.getName(), 
+                user.getLastName(), 
+                user.getActive(), 
+                user.getCargo());
+    }
+    
     
     public UserResponseDTO saveUser(UserCreateDTO request) {
         RolModel rol = rolRepository.findById(request.getIdRol())
@@ -65,6 +75,7 @@ public class UserService {
         user.setActive(request.getActive());
         user.setCargo(request.getCargo());
         user.setEmail(request.getEmail());
+        user.setName(request.getName());
         user.setRol(rol);
 
         return userRepository.save(user);

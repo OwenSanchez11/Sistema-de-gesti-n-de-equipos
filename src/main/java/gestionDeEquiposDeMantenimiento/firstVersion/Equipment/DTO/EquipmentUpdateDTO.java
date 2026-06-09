@@ -7,5 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EquipmentUpdateDTO {
-    
+    private Boolean active;
+    private String status;
 }

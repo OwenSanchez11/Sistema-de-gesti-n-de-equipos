@@ -1,6 +1,7 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.Equipment;
 
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentUpdateDTO;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,9 @@ public class EquipmentController {
         return this.EquipmentService.getAllEquipment();
 } 
     
-    @GetMapping(path = "/{id}")
-    public Optional<EquipmentModel> getEquipmentById(@PathVariable Long id) {
-        return this.EquipmentService.getEquipmentById(id);
+    @GetMapping(path = "/{idEquipment}")
+    public Optional<EquipmentModel> getEquipmentById(@PathVariable Long idEquipment) {
+        return this.EquipmentService.getEquipmentById(idEquipment);
     }
     
     @PostMapping(path = "/saveEquipment")
@@ -36,19 +37,19 @@ public class EquipmentController {
          return this.EquipmentService.saveEquipment(request);
      }
      
-     @PutMapping(path = "/update/{id}")
-     public EquipmentModel updateEquipmentById(@RequestBody EquipmentModel request, @PathVariable Long id) {
-         return this.EquipmentService.updateEquipment(request, id);
+     @PutMapping(path = "/update/{idEquipment}")
+     public EquipmentModel updateEquipmentById(@RequestBody EquipmentUpdateDTO request, @PathVariable Long idEquipment) {
+         return this.EquipmentService.updateEquipment(request, idEquipment);
      }
      
-     @DeleteMapping(path = "/delete/{id}")
-     public String deleteEquipment(@PathVariable Long id) {
-         Boolean ok = this.EquipmentService.deleteEquipment(id);
+     @DeleteMapping(path = "/delete/{idEquipment}")
+     public String deleteEquipment(@PathVariable Long idEquipment) {
+         Boolean ok = this.EquipmentService.deleteEquipment(idEquipment);
          if (ok) {
-             return "El equipo con el id: "+ id + " ha sido borrado con éxito";
+             return "El equipo con el id: "+ idEquipment + " ha sido borrado con éxito";
          }
          else {
-             return "No se encontró el equipo con el id: "+ id;
+             return "No se encontró el equipo con el id: "+ idEquipment;
          }
      }
      
