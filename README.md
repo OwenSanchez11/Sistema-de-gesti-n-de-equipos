@@ -14,7 +14,7 @@
 <h3>Estado Actual del proyecto</h3>
 <ul>
   <li>CRUD de uuarios</li>
-  <li>CRUD de rol(próximo a completar)</li>
+  <li>CRUD de rol</li>
   <li>CRUD de equipments</li>
 </ul>
 <h3>Próximas funcionalidades</h3>
