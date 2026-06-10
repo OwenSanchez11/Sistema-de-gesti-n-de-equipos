@@ -1,6 +1,7 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.Equipment;
 
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentUpdateDTO;
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +25,19 @@ public class EquipmentService {
     }
    
     
-    public EquipmentModel saveEquipment(EquipmentModel equip) {
-        return EquipmentRepository.save(equip);
+    public EquipmentModel saveEquipment(EquipmentCreateDTO equip) {
+        EquipmentModel equipment = new EquipmentModel();
+        equipment.setName(equip.getName());
+        equipment.setCodeInventory(equip.getCodeInventory());
+        equipment.setDescription(equip.getDescription());
+        equipment.setBrand(equip.getBrand());
+        equipment.setModel(equip.getModel());
+        equipment.setSeriesNum(equip.getSeriesNum());
+        equipment.setStatus(equip.getStatus());
+        equipment.setLocation(equip.getLocation());
+        equipment.setActive(equip.getActive());
+        
+        return EquipmentRepository.save(equipment);
     }
     
     

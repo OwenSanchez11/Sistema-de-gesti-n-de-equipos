@@ -3,6 +3,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolRepository;
+import gestionDeEquiposDeMantenimiento.firstVersion.RolController.RolDTO.RolCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.RolController.RolDTO.RolUpdateDTO;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,9 @@ public class RolService {
         return rolRepository.findById(idRol);
     }
     
-    public RolModel saveRol(RolModel rol) {
+    public RolModel saveRol(RolCreateDTO request) {
+        RolModel rol = new RolModel();
+        rol.setName(request.getName());
         return rolRepository.save(rol);
     }
     

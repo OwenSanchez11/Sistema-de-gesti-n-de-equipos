@@ -1,6 +1,7 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.Equipment;
 
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentUpdateDTO;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class EquipmentController {
     }
     
     @PostMapping(path = "/saveEquipment")
-     public EquipmentModel saveEquipment(@RequestBody EquipmentModel request) {
+     public EquipmentModel saveEquipment(@RequestBody EquipmentCreateDTO request) {
          return this.EquipmentService.saveEquipment(request);
      }
      

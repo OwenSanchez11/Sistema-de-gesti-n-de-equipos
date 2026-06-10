@@ -5,6 +5,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol;
 import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolService;
+import gestionDeEquiposDeMantenimiento.firstVersion.RolController.RolDTO.RolCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.RolController.RolDTO.RolUpdateDTO;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +40,7 @@ public class RolController {
     
     
     @PostMapping(path = "/save")
-    public RolModel saveRol(@RequestBody RolModel request) {
+    public RolModel saveRol(@RequestBody RolCreateDTO request) {
         return this.rolService.saveRol(request);
     }
     
