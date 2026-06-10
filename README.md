@@ -87,26 +87,41 @@
 </ul>
 
 <h4>Endpoints principales</h4>
+## 📌 Main Endpoints
+
+### 🔐 Role
+
+| Method | Endpoint                     | Description             |
+| ------ | ---------------------------- | ----------------------- |
+| POST   | `/roles/save`                | Create a new role       |
+| GET    | `/roles/all`                 | Retrieve all roles      |
+| GET    | `/roles/{idRole}`            | Retrieve a role by ID   |
+| PUT    | `/roles/updateRol/{idRol}`   | Update role information |
+| DELETE | `/roles/deleteRol/{idRol}` | Delete a role           |
+
+---
 
 ### 👤 User
 
-| Method | Endpoint            | Description             |
-| ------ | ------------------- | ----------------------- |
-| POST   | `/user/save`        | Create a new user       |
-| GET    | `/user/all`         | Get all users           |
-| GET    | `/user/{id}`        | Get user by ID          |
-| PUT    | `/user/update/{id}` | Update user information |
+| Method | Endpoint                     | Description             |
+| ------ | ---------------------------- | ----------------------- |
+| POST   | `/users/createUser`          | Create a new user       |
+| GET    | `/users/all`                 | Retrieve all users      |
+| GET    | `/users/getUser/{idUser}`    | Retrieve a user by ID   |
+| PUT    | `/users/updateUser/{idUser}` | Update user information |
+| DELETE | `/users/deleteUser/{idUser}` | Delete a user           |
 
 ---
 
 ### 🛠 Equipment
 
-| Method | Endpoint                 | Description                  |
-| ------ | ------------------------ | ---------------------------- |
-| POST   | `/equipment/save`        | Register a new equipment     |
-| GET    | `/equipment/all`         | Get all equipment            |
-| GET    | `/equipment/{id}`        | Get equipment by ID          |
-| PUT    | `/equipment/update/{id}` | Update equipment information |
+| Method | Endpoint                           | Description                  |
+| ------ | ---------------------------------- | ---------------------------- |
+| POST   | `/equipments/saveEquipment`        | Register a new equipment     |
+| GET    | `/equipments/all`                  | Retrieve all equipment       |
+| GET    | `/equipments/{idEquipment}`        | Retrieve equipment by ID     |
+| PUT    | `/equipments/update/{idEquipment}` | Update equipment information |
+| DELETE | `/equipments/delete/{idEquipment}` | Delete equipment             |
 
 ---
 
@@ -115,24 +130,22 @@
 | Method | Endpoint                    | Description               |
 | ------ | --------------------------- | ------------------------- |
 | POST   | `/loan/saveLoan`            | Create a new loan         |
-| GET    | `/loan/all`                 | Get all loans             |
-| GET    | `/loan/{id}`                | Get loan by ID            |
+| GET    | `/loan/all`                 | Retrieve all loans        |
+| GET    | `/loan/{idLoan}`            | Retrieve a loan by ID     |
 | PUT    | `/loan/updateLoan/{idLoan}` | Register equipment return |
+| DELETE | `/loan/delete/{idLoan}`     | Delete a loan record      |
 
 ---
 
 ### 🔧 Maintenance
 
-| Method | Endpoint                       | Description                 |
-| ------ | ------------------------------ | --------------------------- |
-| POST   | `/maintenance/saveMaintenance` | Create a maintenance record |
-| GET    | `/maintenance/all`             | Get all maintenance records |
-| GET    | `/maintenance/{id}`            | Get maintenance by ID       |
-| PUT    | `/maintenance/update/{id}`     | Update maintenance status   |
-
-
-
-
+| Method | Endpoint                                         | Description                         |
+| ------ | ------------------------------------------------ | ----------------------------------- |
+| POST   | `/maintenance/saveMaintenance`                   | Create a maintenance record         |
+| GET    | `/maintenance/all`                               | Retrieve all maintenance records    |
+| GET    | `/maintenance/getById/{idMaintenance}`           | Retrieve a maintenance record by ID |
+| PUT    | `/maintenance/updateMaintenance/{idMaintenance}` | Update maintenance status           |
+| DELETE | `/maintenance/delete/{idMaintenance}`            | Delete a maintenance record         |
 
 
 <h3>Estado actual del proyecto</h3>
