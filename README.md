@@ -145,7 +145,7 @@
 | GET    | `/maintenance/all`                               | Retrieve all maintenance records    |
 | GET    | `/maintenance/getById/{idMaintenance}`           | Retrieve a maintenance record by ID |
 | PUT    | `/maintenance/updateMaintenance/{idMaintenance}` | Update maintenance status           |
-| DELETE | `/maintenance/delete/{idMaintenance}`            | Delete a maintenance record         |
+
 
 
 <h3>Estado actual del proyecto</h3>
