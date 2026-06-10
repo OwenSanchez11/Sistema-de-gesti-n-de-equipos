@@ -160,5 +160,4 @@
 </ul>
 
 <h3>Autor</h3>
-Owen Sanchez
-Backend Developer en formación enfocado en Java, Spring Boot y PostgreSQL.
+Owen Sanchez - Backend Developer en formación enfocado en Java, Spring Boot y PostgreSQL.
