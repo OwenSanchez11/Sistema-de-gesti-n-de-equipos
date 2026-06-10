@@ -31,7 +31,7 @@ public class LoanService {
                  loan.getEquipment().getIdEquipment(), 
                  loan.getEquipment().getName(), 
                  loan.getUserReceiver().getName(), loan.getUserDeliverer().getName(), loan.getObservationsOut(),loan.getObservationsReturn(),
-                 LocalDateTime.MIN, LoanStatus.ACTIVE)).toList();
+                 LocalDateTime.now(), LoanStatus.ACTIVE)).toList();
     }
     
     public LoanResponseDTO getLoanById(Long idLoan) {
@@ -69,7 +69,7 @@ public class LoanService {
         return new LoanResponseDTO(loan.getIdLoan(), loan.getEquipment().getIdEquipment(),
                 loan.getEquipment().getName(), loan.getUserReceiver().getName(), loan.getUserDeliverer().getName(), 
                 loan.getObservationsOut(), loan.getObservationsReturn() ,
-                LocalDateTime.MIN, LoanStatus.ACTIVE);
+                LocalDateTime.now(), LoanStatus.ACTIVE);
     }
         
    
