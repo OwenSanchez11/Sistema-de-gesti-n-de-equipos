@@ -13,13 +13,13 @@
 </ul>
 <h3>Estado Actual del proyecto</h3>
 <ul>
-  <li>CRUD de uuarios</li>
+  <li>CRUD de users</li>
   <li>CRUD de rol</li>
   <li>CRUD de equipments</li>
+  <li>CRUD de loan y gestión de prestamos relacionado con users y equipments</li>
 </ul>
 <h3>Próximas funcionalidades</h3>
 <ul>
-  <li>Gestión de prestamos</li>
   <li>Autenticación JWT</li>
   <li>Gestión de mantenimiento</li>
 </ul>
