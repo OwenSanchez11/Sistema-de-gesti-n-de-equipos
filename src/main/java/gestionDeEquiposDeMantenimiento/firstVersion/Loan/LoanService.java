@@ -12,7 +12,6 @@ import gestionDeEquiposDeMantenimiento.firstVersion.User.UserModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +29,9 @@ public class LoanService {
          return loans.stream().map(loan -> new LoanResponseDTO(loan.getIdLoan(), 
                  loan.getEquipment().getIdEquipment(), 
                  loan.getEquipment().getName(), 
-                 loan.getUserReceiver().getName(), loan.getUserDeliverer().getName(), loan.getObservationsOut(),loan.getObservationsReturn(),
-                 LocalDateTime.now(), LoanStatus.ACTIVE)).toList();
+                 loan.getUserReceiver().getName(), loan.getUserDeliverer().getName(),
+                 loan.getObservationsOut(),loan.getObservationsReturn(),
+                 loan.getLoanDate(), loan.getLoanStatus())).toList();
     }
     
     public LoanResponseDTO getLoanById(Long idLoan) {
@@ -42,7 +42,7 @@ public class LoanService {
                  loan.getEquipment().getName(), 
                  loan.getUserReceiver().getName(), loan.getUserDeliverer().getName(),loan.getObservationsOut(),
                 loan.getObservationsReturn(), 
-                 LocalDateTime.MIN, LoanStatus.ACTIVE);
+                 loan.getLoanDate(), loan.getLoanStatus());
     }
     
     
@@ -52,6 +52,10 @@ public class LoanService {
         UserModel userReceiver = userRepository.findById(request.getIdUserReceiver()).orElseThrow(() -> new RuntimeException("User not found"));
         UserModel userDeliverer = userRepository.findById(request.getIdUserDeliverer()).orElseThrow(() -> new RuntimeException("User not found"));
                 
+        if (!equipment.getActive()) {
+            throw new RuntimeException("Equipment is inactive");
+        }
+        
         loan.setEquipment(equipment);
         loan.setUserReceiver(userReceiver);
         loan.setUserDeliverer(userDeliverer);
@@ -59,10 +63,12 @@ public class LoanService {
         loan.setObservationsOut(request.getObservationsOut());
         loan.setLoanStatus(LoanStatus.ACTIVE);
         
+        equipment.setActive(Boolean.FALSE);
+        equipmentRepository.save(equipment);
+            
         LoanModel loanSaved = loanRepository.save(loan);
         return mapToResponse(loanSaved);
        
-        
     }
 
     private LoanResponseDTO mapToResponse(LoanModel loan) {
@@ -75,9 +81,19 @@ public class LoanService {
    
     public LoanResponseDTO updateLoan(LoanUpdateDTO request, Long idLoan) {
         LoanModel loan = loanRepository.findById(idLoan).orElseThrow(() -> new RuntimeException("Loan not found"));
+        EquipmentModel equipment = equipmentRepository.findById(idLoan).orElseThrow(() -> new RuntimeException("Equipment not found"));
+        
+        if (loan.getLoanStatus() == LoanStatus.RETURNED) {
+            throw new RuntimeException("Loan already returned");
+        }
+        
         loan.setLoanStatus(LoanStatus.RETURNED);
         loan.setReturnDate(LocalDateTime.now());
         loan.setObservationsReturn(request.getObservationsReturn());
+        
+        equipment.setActive(Boolean.TRUE);
+        equipmentRepository.save(equipment);
+        
         LoanModel loanSaved = loanRepository.save(loan);
         return mapToResponse(loanSaved);
     }

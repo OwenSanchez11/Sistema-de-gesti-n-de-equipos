@@ -54,11 +54,18 @@ public class MaintenanceService {
         EquipmentModel idEquipment = equipmentRepository.findById(request.getIdEquipment()).orElseThrow(() -> new RuntimeException("Equipment not found"));
         UserModel idUser = userRepository.findById(request.getIdUser()).orElseThrow(() -> new RuntimeException("User not found"));
         
+        if (!idEquipment.getActive()) {
+            throw new RuntimeException("Equipment not found for maintenance");
+        }
+        
         maintenance.setEquipment(idEquipment);
         maintenance.setUserRegister(idUser);
         maintenance.setDescription(request.getDescription());
         maintenance.setStartDate(LocalDate.now());
         maintenance.setMaintenanceStatus(MaintenanceStatus.IN_PROGRESS);
+        
+        idEquipment.setActive(Boolean.FALSE);
+        equipmentRepository.save(idEquipment);
         
         MaintenanceModel maintenanceSaved = maintenanceRepository.save(maintenance);
         
@@ -82,8 +89,13 @@ public class MaintenanceService {
     
     public MaintenanceResponseDTO updateMaintenance(Long idMaintenance) {
         MaintenanceModel maintenance = maintenanceRepository.findById(idMaintenance).orElseThrow(() -> new RuntimeException("Maintenance Not Found"));
+        EquipmentModel equipment = equipmentRepository.findById(idMaintenance).orElseThrow(() -> new RuntimeException("Equipment not found"));
         maintenance.setMaintenanceStatus(MaintenanceStatus.COMPLETED);
         maintenance.setEndDate(LocalDate.now());
+        
+        equipment.setActive(Boolean.TRUE);
+        equipmentRepository.save(equipment);
+
         MaintenanceModel maintenanceSaved = maintenanceRepository.save(maintenance);
         
         return mapToResponse(maintenanceSaved);
