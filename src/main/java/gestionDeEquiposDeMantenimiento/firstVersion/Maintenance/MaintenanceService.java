@@ -58,6 +58,10 @@ public class MaintenanceService {
             throw new RuntimeException("Equipment not found for maintenance");
         }
         
+        if (!idUser.getActive()) {
+            throw  new RuntimeException("User is disconnect");
+        }
+        
         maintenance.setEquipment(idEquipment);
         maintenance.setUserRegister(idUser);
         maintenance.setDescription(request.getDescription());
@@ -89,7 +93,7 @@ public class MaintenanceService {
     
     public MaintenanceResponseDTO updateMaintenance(Long idMaintenance) {
         MaintenanceModel maintenance = maintenanceRepository.findById(idMaintenance).orElseThrow(() -> new RuntimeException("Maintenance Not Found"));
-        EquipmentModel equipment = equipmentRepository.findById(idMaintenance).orElseThrow(() -> new RuntimeException("Equipment not found"));
+        EquipmentModel equipment = maintenance.getEquipment();
         maintenance.setMaintenanceStatus(MaintenanceStatus.COMPLETED);
         maintenance.setEndDate(LocalDate.now());
         

@@ -56,6 +56,14 @@ public class LoanService {
             throw new RuntimeException("Equipment is inactive");
         }
         
+        if (!userReceiver.getActive()) {
+            throw new RuntimeException("User is inactive");
+        }
+        
+        if (!userDeliverer.getActive()) {
+            throw new RuntimeException("User is inactive");
+        }
+        
         loan.setEquipment(equipment);
         loan.setUserReceiver(userReceiver);
         loan.setUserDeliverer(userDeliverer);
@@ -81,7 +89,7 @@ public class LoanService {
    
     public LoanResponseDTO updateLoan(LoanUpdateDTO request, Long idLoan) {
         LoanModel loan = loanRepository.findById(idLoan).orElseThrow(() -> new RuntimeException("Loan not found"));
-        EquipmentModel equipment = equipmentRepository.findById(idLoan).orElseThrow(() -> new RuntimeException("Equipment not found"));
+        EquipmentModel equipment = loan.getEquipment();
         
         if (loan.getLoanStatus() == LoanStatus.RETURNED) {
             throw new RuntimeException("Loan already returned");
