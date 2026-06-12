@@ -86,6 +86,13 @@
   <li>User 1 → N Maintenance (Register)</li>
 </ul>
 
+<h4>Manejo de excepciones globales</h4>
+<ul>
+  <li>Excepciones personalizadas para la lógica de negocio y recursos faltantes</li>
+  <li>Respuestas de error HTTP estandarizadas(404,500,409)</li>
+  <li>Gestión centralizada de excepciones con `@RestControllerAdvice`</li>
+</ul>
+
 <h4>Endpoints principales</h4>
 ## 📌 Main Endpoints
 
@@ -146,6 +153,14 @@
 | GET    | `/maintenance/getById/{idMaintenance}`           | Retrieve a maintenance record by ID |
 | PUT    | `/maintenance/updateMaintenance/{idMaintenance}` | Update maintenance status           |
 
+
+## ⚠️ API Error Handling
+
+| HTTP Status | Exception | Description |
+|------------|-----------|-------------|
+| 404 | `ResourceNotFoundException` | Requested resource does not exist |
+| 409 | `BusinessRuleException` | Operation violates business logic rules |
+| 500 | `Exception` | Unexpected internal server error |
 
 
 <h3>Estado actual del proyecto</h3>
