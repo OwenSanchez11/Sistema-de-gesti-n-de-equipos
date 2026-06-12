@@ -1,5 +1,5 @@
 
-package gestionDeEquiposDeMantenimiento.firstVersion.RolController.RolDTO;
+package gestionDeEquiposDeMantenimiento.firstVersion.RolDTO;
 
 import lombok.Getter;
 import lombok.Setter;

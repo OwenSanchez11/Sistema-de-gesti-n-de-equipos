@@ -3,6 +3,8 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Maintenance;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentRepository;
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.BusinessRuleException;
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Maintenance.DTO.MaintenanceCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.Maintenance.DTO.MaintenanceResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserModel;
@@ -36,7 +38,7 @@ public class MaintenanceService {
     
     
     public MaintenanceResponseDTO getMaintenanceById(Long idMaintenance) {
-        MaintenanceModel maintenance = maintenanceRepository.findById(idMaintenance).orElseThrow(() -> new RuntimeException("Maintennace not found"));
+        MaintenanceModel maintenance = maintenanceRepository.findById(idMaintenance).orElseThrow(() -> new ResourceNotFoundException("Maintennace not found"));
         
         return new MaintenanceResponseDTO(maintenance.getIdMaintenance(), 
                 maintenance.getEquipment().getIdEquipment(), 
@@ -51,15 +53,15 @@ public class MaintenanceService {
     
     public MaintenanceResponseDTO saveMaintenance(MaintenanceCreateDTO request) {
         MaintenanceModel maintenance = new MaintenanceModel();
-        EquipmentModel idEquipment = equipmentRepository.findById(request.getIdEquipment()).orElseThrow(() -> new RuntimeException("Equipment not found"));
-        UserModel idUser = userRepository.findById(request.getIdUser()).orElseThrow(() -> new RuntimeException("User not found"));
+        EquipmentModel idEquipment = equipmentRepository.findById(request.getIdEquipment()).orElseThrow(() -> new ResourceNotFoundException("Equipment not found"));
+        UserModel idUser = userRepository.findById(request.getIdUser()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
         if (!idEquipment.getActive()) {
-            throw new RuntimeException("Equipment not found for maintenance");
+            throw new BusinessRuleException("Equipment is inactive");
         }
         
         if (!idUser.getActive()) {
-            throw  new RuntimeException("User is disconnect");
+            throw  new BusinessRuleException("User is disconnect");
         }
         
         maintenance.setEquipment(idEquipment);
@@ -67,7 +69,7 @@ public class MaintenanceService {
         maintenance.setDescription(request.getDescription());
         maintenance.setStartDate(LocalDate.now());
         maintenance.setMaintenanceStatus(MaintenanceStatus.IN_PROGRESS);
-        
+        maintenance.setPriceMaintenance(request.getPriceMaintenance());
         idEquipment.setActive(Boolean.FALSE);
         equipmentRepository.save(idEquipment);
         
@@ -92,7 +94,7 @@ public class MaintenanceService {
 }
     
     public MaintenanceResponseDTO updateMaintenance(Long idMaintenance) {
-        MaintenanceModel maintenance = maintenanceRepository.findById(idMaintenance).orElseThrow(() -> new RuntimeException("Maintenance Not Found"));
+        MaintenanceModel maintenance = maintenanceRepository.findById(idMaintenance).orElseThrow(() -> new ResourceNotFoundException("Maintenance Not Found"));
         EquipmentModel equipment = maintenance.getEquipment();
         maintenance.setMaintenanceStatus(MaintenanceStatus.COMPLETED);
         maintenance.setEndDate(LocalDate.now());

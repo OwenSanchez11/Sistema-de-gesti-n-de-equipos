@@ -5,6 +5,8 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Loan;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentRepository;
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.BusinessRuleException;
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanUpdateDTO;
@@ -35,7 +37,7 @@ public class LoanService {
     }
     
     public LoanResponseDTO getLoanById(Long idLoan) {
-        LoanModel loan = loanRepository.findById(idLoan).orElseThrow(() -> new RuntimeException("Loan not found"));
+        LoanModel loan = loanRepository.findById(idLoan).orElseThrow(() -> new ResourceNotFoundException("Loan not found"));
         
         return new LoanResponseDTO(loan.getIdLoan(), 
                  loan.getEquipment().getIdEquipment(), 
@@ -48,20 +50,20 @@ public class LoanService {
     
     public LoanResponseDTO saveLoan(LoanCreateDTO request) {
         LoanModel loan = new LoanModel();
-        EquipmentModel equipment = equipmentRepository.findById(request.getIdEquipment()).get();
-        UserModel userReceiver = userRepository.findById(request.getIdUserReceiver()).orElseThrow(() -> new RuntimeException("User not found"));
-        UserModel userDeliverer = userRepository.findById(request.getIdUserDeliverer()).orElseThrow(() -> new RuntimeException("User not found"));
+        EquipmentModel equipment = equipmentRepository.findById(request.getIdEquipment()).orElseThrow(() -> new ResourceNotFoundException("Equipment Not Found"));
+        UserModel userReceiver = userRepository.findById(request.getIdUserReceiver()).orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
+        UserModel userDeliverer = userRepository.findById(request.getIdUserDeliverer()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
                 
         if (!equipment.getActive()) {
-            throw new RuntimeException("Equipment is inactive");
+            throw new BusinessRuleException("Equipment inactive");
         }
         
         if (!userReceiver.getActive()) {
-            throw new RuntimeException("User is inactive");
+            throw new BusinessRuleException("User is inactive");
         }
         
         if (!userDeliverer.getActive()) {
-            throw new RuntimeException("User is inactive");
+            throw new BusinessRuleException("User is inactive");
         }
         
         loan.setEquipment(equipment);
@@ -88,11 +90,11 @@ public class LoanService {
         
    
     public LoanResponseDTO updateLoan(LoanUpdateDTO request, Long idLoan) {
-        LoanModel loan = loanRepository.findById(idLoan).orElseThrow(() -> new RuntimeException("Loan not found"));
+        LoanModel loan = loanRepository.findById(idLoan).orElseThrow(() -> new ResourceNotFoundException("Loan not found"));
         EquipmentModel equipment = loan.getEquipment();
         
         if (loan.getLoanStatus() == LoanStatus.RETURNED) {
-            throw new RuntimeException("Loan already returned");
+            throw new BusinessRuleException("Loan already returned");
         }
         
         loan.setLoanStatus(LoanStatus.RETURNED);

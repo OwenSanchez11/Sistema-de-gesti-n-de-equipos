@@ -1,7 +1,7 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.User;
 
-import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolModel;
+import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

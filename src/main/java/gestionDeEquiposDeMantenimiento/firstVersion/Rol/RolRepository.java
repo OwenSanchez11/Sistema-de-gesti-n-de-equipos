@@ -1,7 +1,7 @@
 
-package gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol;
+package gestionDeEquiposDeMantenimiento.firstVersion.Rol;
 
-import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolModel;
+import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

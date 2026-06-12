@@ -1,5 +1,5 @@
 
-package gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol;
+package gestionDeEquiposDeMantenimiento.firstVersion.Rol;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

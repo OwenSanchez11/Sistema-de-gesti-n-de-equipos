@@ -1,8 +1,8 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.User;
 
-import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolModel;
-import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolRepository;
+import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolModel;
+import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserUpdateDTO;

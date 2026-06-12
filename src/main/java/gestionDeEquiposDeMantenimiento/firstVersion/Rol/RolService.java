@@ -1,18 +1,20 @@
 
-package gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol;
+package gestionDeEquiposDeMantenimiento.firstVersion.Rol;
 
-import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolModel;
-import gestionDeEquiposDeMantenimiento.firstVersion.RolController.Rol.RolRepository;
-import gestionDeEquiposDeMantenimiento.firstVersion.RolController.RolDTO.RolCreateDTO;
-import gestionDeEquiposDeMantenimiento.firstVersion.RolController.RolDTO.RolUpdateDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolModel;
+import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolRepository;
+import gestionDeEquiposDeMantenimiento.firstVersion.RolDTO.RolCreateDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.RolDTO.RolUpdateDTO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RolService {
     
+        
     private final RolRepository rolRepository;
     
     public RolService(RolRepository rolRepository) {
@@ -28,8 +30,10 @@ public class RolService {
     }
     
     public RolModel saveRol(RolCreateDTO request) {
+        
         RolModel rol = new RolModel();
-        rol.setName(request.getName());
+        rol.setName(request.getName().toUpperCase());
+        
         return rolRepository.save(rol);
     }
     
@@ -51,6 +55,7 @@ public class RolService {
 
         }
     }
+
     
     
     
