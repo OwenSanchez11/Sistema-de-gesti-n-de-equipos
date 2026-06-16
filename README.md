@@ -167,10 +167,9 @@
 <span>Proyecto en desarrollo</span>
 <h4>Próximas mejoras</h4>
 <ul>
-  <li>Manejo global de excepciones</li>
-  <li>Validaciones de negocio</li>
-  <li>DTOs optimizados</li>
-  <li>Historial de mantenimientos por equipo</li>
+  <li>Historial por equipos</li>
+  <li>querys avanzadas en la DB</li>
+  <li>Documentación de la API</li>
   <li>Seguridad con JWT</li>
 </ul>
 
