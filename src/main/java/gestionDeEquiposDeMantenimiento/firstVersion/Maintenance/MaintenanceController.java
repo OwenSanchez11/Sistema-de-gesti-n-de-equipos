@@ -3,6 +3,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Maintenance;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Maintenance.DTO.MaintenanceCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.Maintenance.DTO.MaintenanceResponseDTO;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class MaintenanceController {
     }
     
     @PostMapping(path = "/saveMaintenance")
-    public MaintenanceResponseDTO saveMaintenance(@RequestBody MaintenanceCreateDTO request) {
+    public MaintenanceResponseDTO saveMaintenance(@Valid @RequestBody MaintenanceCreateDTO request) {
         return this.maintenanceService.saveMaintenance(request);
     }
     

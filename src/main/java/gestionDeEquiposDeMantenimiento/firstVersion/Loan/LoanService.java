@@ -10,10 +10,13 @@ import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundE
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanUpdateDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.Maintenance.MaintenanceModel;
+import gestionDeEquiposDeMantenimiento.firstVersion.Maintenance.MaintenanceRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -50,10 +53,18 @@ public class LoanService {
     
     public LoanResponseDTO saveLoan(LoanCreateDTO request) {
         LoanModel loan = new LoanModel();
+        
         EquipmentModel equipment = equipmentRepository.findById(request.getIdEquipment()).orElseThrow(() -> new ResourceNotFoundException("Equipment Not Found"));
         UserModel userReceiver = userRepository.findById(request.getIdUserReceiver()).orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
         UserModel userDeliverer = userRepository.findById(request.getIdUserDeliverer()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-                
+  
+        
+        Optional<LoanModel> activeLoan = loanRepository.findByEquipmentAndLoanStatus(equipment, LoanStatus.ACTIVE);
+        
+        if (activeLoan.isPresent()) {
+            throw  new BusinessRuleException("Equipment already has an active loan");
+        }
+        
         if (!equipment.getActive()) {
             throw new BusinessRuleException("Equipment inactive");
         }

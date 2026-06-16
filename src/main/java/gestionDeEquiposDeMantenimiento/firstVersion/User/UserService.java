@@ -40,7 +40,7 @@ public class UserService {
         RolModel rol = rolRepository.findById(request.getIdRol())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
         UserModel user = new UserModel();
-        user.setActive(request.getActive());
+        user.setActive(Boolean.TRUE);
         user.setCargo(request.getCargo());
         user.setDocumento(request.getDocumento());
         user.setEmail(request.getEmail());

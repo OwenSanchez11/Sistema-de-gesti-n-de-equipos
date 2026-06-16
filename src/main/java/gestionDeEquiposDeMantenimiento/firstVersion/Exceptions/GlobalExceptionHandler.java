@@ -2,8 +2,12 @@
 package gestionDeEquiposDeMantenimiento.firstVersion.Exceptions;
 
 import java.time.LocalDateTime;
+import static org.aspectj.bridge.MessageUtil.error;
+import static org.slf4j.helpers.Reporter.error;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,6 +36,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
+        String message  = ex.getBindingResult().getFieldError().getDefaultMessage();
+        
+        ErrorResponse error = new ErrorResponse(LocalDateTime.now(), 400, "Validation error", message);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
     
+    
+   
     
 }

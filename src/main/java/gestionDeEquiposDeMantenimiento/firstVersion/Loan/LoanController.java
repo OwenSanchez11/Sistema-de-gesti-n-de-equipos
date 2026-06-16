@@ -4,6 +4,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Loan;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanUpdateDTO;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -34,16 +35,14 @@ public class LoanController {
     }
     
     @PostMapping(path = "/saveLoan")
-    public LoanResponseDTO saveNewLoan(@RequestBody LoanCreateDTO request){
+    public LoanResponseDTO saveNewLoan(@Valid @RequestBody LoanCreateDTO request){
         return this.loanService.saveLoan(request);
     }
     
     @PutMapping(path = "/updateLoan/{idLoan}")
-    public LoanResponseDTO updateLoan(@RequestBody LoanUpdateDTO request, @PathVariable Long idLoan) {
+    public LoanResponseDTO updateLoan(@Valid @RequestBody LoanUpdateDTO request, @PathVariable Long idLoan) {
         return this.loanService.updateLoan(request, idLoan);
     }
-    
-    
 
     @DeleteMapping(path = "/delete/{idLoan}")
     public String deleteLoan(@PathVariable Long idLoan) {

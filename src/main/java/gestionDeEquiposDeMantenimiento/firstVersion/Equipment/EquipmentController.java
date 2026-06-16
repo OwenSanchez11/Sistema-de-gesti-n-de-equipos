@@ -3,6 +3,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Equipment;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentUpdateDTO;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +35,13 @@ public class EquipmentController {
     }
     
     @PostMapping(path = "/saveEquipment")
-     public EquipmentModel saveEquipment(@RequestBody EquipmentCreateDTO request) {
+     public EquipmentModel saveEquipment(@Valid @RequestBody EquipmentCreateDTO request) {
          return this.EquipmentService.saveEquipment(request);
      }
      
 
      @PutMapping(path = "/update/{idEquipment}")
-     public EquipmentModel updateEquipmentById(@RequestBody EquipmentUpdateDTO request, @PathVariable Long idEquipment) {
+     public EquipmentModel updateEquipmentById(@Valid @RequestBody EquipmentUpdateDTO request, @PathVariable Long idEquipment) {
          return this.EquipmentService.updateEquipment(request, idEquipment);
 
      }

@@ -4,6 +4,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.User;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserUpdateDTO;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,12 +35,12 @@ public class UserController {
     }
     
     @PostMapping(path = "/createUser")
-    public UserResponseDTO createUser(@RequestBody UserCreateDTO request) {
+    public UserResponseDTO createUser(@Valid @RequestBody UserCreateDTO request) {
         return this.userService.saveUser(request);
     }
     
     @PutMapping(path = "/editarUser/{id}")
-    public UserModel editarUser(@RequestBody UserUpdateDTO request, @PathVariable Long id) {
+    public UserModel editarUser(@Valid @RequestBody UserUpdateDTO request, @PathVariable Long id) {
         return this.userService.editarUser(request, id);
     }
     

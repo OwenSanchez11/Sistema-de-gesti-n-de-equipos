@@ -35,7 +35,7 @@ public class EquipmentService {
         equipment.setSeriesNum(equip.getSeriesNum());
         equipment.setStatus(equip.getStatus());
         equipment.setLocation(equip.getLocation());
-        equipment.setActive(equip.getActive());
+        equipment.setActive(Boolean.TRUE);
         
         return EquipmentRepository.save(equipment);
     }
