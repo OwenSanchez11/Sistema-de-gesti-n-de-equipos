@@ -1,6 +1,7 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.User;
 
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.BusinessRuleException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserResponseDTO;
@@ -42,6 +43,20 @@ public class UserService {
         UserModel user = new UserModel();
         user.setActive(Boolean.TRUE);
         user.setCargo(request.getCargo());
+        
+        boolean userExist =  userRepository.existsByDocumento(request.getDocumento());
+        boolean emailExist = userRepository.existsByEmail(request.getEmail());
+        
+        
+        if (userExist) {
+            throw new BusinessRuleException("A user with this document already exists");
+        }
+        
+        if (emailExist) {
+            throw new BusinessRuleException("A user with this email already exists");
+        }
+     
+        
         user.setDocumento(request.getDocumento());
         user.setEmail(request.getEmail());
         user.setLastName(request.getLastName());

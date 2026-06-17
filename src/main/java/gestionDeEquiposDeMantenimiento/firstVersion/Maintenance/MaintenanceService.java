@@ -11,6 +11,7 @@ import gestionDeEquiposDeMantenimiento.firstVersion.User.UserModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserRepository;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -53,25 +54,27 @@ public class MaintenanceService {
     
     public MaintenanceResponseDTO saveMaintenance(MaintenanceCreateDTO request) {
         MaintenanceModel maintenance = new MaintenanceModel();
-        EquipmentModel idEquipment = equipmentRepository.findById(request.getIdEquipment()).orElseThrow(() -> new ResourceNotFoundException("Equipment not found"));
-        UserModel idUser = userRepository.findById(request.getIdUser()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        EquipmentModel equipment = equipmentRepository.findById(request.getIdEquipment()).orElseThrow(() -> new ResourceNotFoundException("Equipment not found"));
+        UserModel user = userRepository.findById(request.getIdUser()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
-        if (!idEquipment.getActive()) {
+
+        if (!equipment.getActive()) {
             throw new BusinessRuleException("Equipment is inactive");
         }
         
-        if (!idUser.getActive()) {
+        if (!user.getActive()) {
             throw  new BusinessRuleException("User is disconnect");
         }
-        
-        maintenance.setEquipment(idEquipment);
-        maintenance.setUserRegister(idUser);
+       
+
+        maintenance.setEquipment(equipment);
+        maintenance.setUserRegister(user);
         maintenance.setDescription(request.getDescription());
         maintenance.setStartDate(LocalDate.now());
         maintenance.setMaintenanceStatus(MaintenanceStatus.IN_PROGRESS);
         maintenance.setPriceMaintenance(request.getPriceMaintenance());
-        idEquipment.setActive(Boolean.FALSE);
-        equipmentRepository.save(idEquipment);
+        equipment.setActive(Boolean.FALSE);
+        equipmentRepository.save(equipment);
         
         MaintenanceModel maintenanceSaved = maintenanceRepository.save(maintenance);
         

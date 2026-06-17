@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,22 +28,22 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy  = GenerationType.IDENTITY)
     private Long idUsuario;
-    @Column
+    @Column(nullable = false)
     private String name;
-    @Column
+    @Column(nullable = false)
     private String lastName;
-    @Column
+    @Column(nullable = false, unique = true)
     private String documento;
-    @Column
+    @Column(nullable = false, unique = true)
     private String email;
-    @Column
+    @Column(nullable = false)
     private String phoneNumber;
     @Column
     private Boolean active;
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false)
     private RolModel rol;
-    @Column
+    @Column(nullable = false)
     private String cargo;
 
 }

@@ -32,11 +32,11 @@ public class MaintenanceModel {
     
     @ManyToOne
     @JoinColumn(name = "id_Equipment")
-    private EquipmentModel Equipment;
+    private EquipmentModel equipment;
     
     @ManyToOne
     @JoinColumn(name = "id_User")
-    private UserModel UserRegister;
+    private UserModel userRegister;
     
     @Column
     private LocalDate startDate;

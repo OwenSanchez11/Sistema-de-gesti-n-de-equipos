@@ -58,13 +58,7 @@ public class LoanService {
         UserModel userReceiver = userRepository.findById(request.getIdUserReceiver()).orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
         UserModel userDeliverer = userRepository.findById(request.getIdUserDeliverer()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
   
-        
-        Optional<LoanModel> activeLoan = loanRepository.findByEquipmentAndLoanStatus(equipment, LoanStatus.ACTIVE);
-        
-        if (activeLoan.isPresent()) {
-            throw  new BusinessRuleException("Equipment already has an active loan");
-        }
-        
+
         if (!equipment.getActive()) {
             throw new BusinessRuleException("Equipment inactive");
         }
