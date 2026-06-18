@@ -4,6 +4,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Exceptions;
 import java.time.LocalDateTime;
 import static org.aspectj.bridge.MessageUtil.error;
 import static org.slf4j.helpers.Reporter.error;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
     
+    
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraint(DataIntegrityViolationException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), 409, "Database integrity violation", "Duplicate value detected. This record already exists.");
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
     
    
     
