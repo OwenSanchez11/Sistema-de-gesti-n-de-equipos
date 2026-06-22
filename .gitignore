@@ -34,3 +34,7 @@ build/
 
 #configuración local 
 src/main/resources/application.properties
+
+#arhivos postman
+.postman/
+postman/

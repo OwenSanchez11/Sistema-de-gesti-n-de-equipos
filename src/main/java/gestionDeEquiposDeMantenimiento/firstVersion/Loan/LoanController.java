@@ -4,6 +4,8 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Loan;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanUpdateDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -17,34 +19,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+@Tag(name = "Loan", description="Todas las operaciones relacionadas con los prestamos de equipos del sistema") 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/loan")
 public class LoanController {
     private final LoanService loanService;
     
-    
-    @GetMapping(path = "/all")
+    @Operation(summary = "método para obtener todos los prestamos guardados en la DB")
+    @GetMapping
     public List<LoanResponseDTO> getAllLoan() {
         return  this.loanService.getAllLoan();
     }
     
+    @Operation(summary = "método para obtener prestamos con su respectiva id con la que se guardó en la DB")
     @GetMapping(path = "/{idLoan}")
     public LoanResponseDTO getLoanById(@PathVariable Long idLoan) {
         return this.loanService.getLoanById(idLoan);
     }
     
-    @PostMapping(path = "/saveLoan")
+    @Operation(summary = "método para crear y guardar un nuevo prestamo en la DB")
+    @PostMapping
     public LoanResponseDTO saveNewLoan(@Valid @RequestBody LoanCreateDTO request){
         return this.loanService.saveLoan(request);
     }
     
-    @PutMapping(path = "/updateLoan/{idLoan}")
+    @Operation(summary = "método para actualizar el estado del prestamo en la DB usando las id de los prestamos")
+    @PutMapping(path = "/{idLoan}")
     public LoanResponseDTO updateLoan(@Valid @RequestBody LoanUpdateDTO request, @PathVariable Long idLoan) {
         return this.loanService.updateLoan(request, idLoan);
     }
 
-    @DeleteMapping(path = "/delete/{idLoan}")
+    @Operation(summary = "método para borrar prestamos de la DB")
+    @DeleteMapping(path = "/{idLoan}")
     public String deleteLoan(@PathVariable Long idLoan) {
         Boolean ok = loanService.deleteLoan(idLoan);
         if (ok) {
