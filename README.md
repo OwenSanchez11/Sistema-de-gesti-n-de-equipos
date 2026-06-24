@@ -93,6 +93,10 @@
   <li>Gestión centralizada de excepciones con `@RestControllerAdvice`</li>
 </ul>
 
+<h5>Documentación con swagger</h5>
+<p>Se agregó la documentación con swagger de los modelos y las excepciones que lanza cada método</p>
+
+
 <h4>Endpoints principales</h4>
 ## 📌 Main Endpoints
 
