@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraint(DataIntegrityViolationException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), 409, "Database integrity violation", "Duplicate value detected. This record already exists.");
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), 409, "Database integrity violation", ex.getMessage());
         
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }

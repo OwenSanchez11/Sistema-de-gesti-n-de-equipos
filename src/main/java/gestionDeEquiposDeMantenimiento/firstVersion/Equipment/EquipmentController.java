@@ -3,7 +3,12 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Equipment;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentUpdateDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -53,15 +58,30 @@ public class EquipmentController {
      }
      
      @Operation(summary = "método para eliminar un equipo de la DB")
+         @ApiResponses(value = {
+        @ApiResponse(
+                responseCode = "200",
+                description ="Equipo borrado con éxito"
+        ),
+        @ApiResponse(
+                responseCode = "404",
+                description = "Equipo no encontrado con el id ingresado",
+                content = @Content(
+                        schema = @Schema(implementation = ErrorResponse.class)
+                )
+        ),
+        @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT - Database integrity violation",
+                content = @Content(
+                        schema = @Schema(implementation = ErrorResponse.class)
+                )
+        )
+    })
      @DeleteMapping(path = "/{idEquipment}")
      public String deleteEquipment(@PathVariable Long idEquipment) {
-         Boolean ok = this.EquipmentService.deleteEquipment(idEquipment);
-         if (ok) {
-             return "El equipo con el id: "+ idEquipment + " ha sido borrado con éxito";
-         }
-         else {
-             return "No se encontró el equipo con el id: "+ idEquipment;
-         }
+        EquipmentService.deleteEquipment(idEquipment);
+        return "El equipo con el id: "+ idEquipment + " ha sido borrado con éxito";
      }
      
      

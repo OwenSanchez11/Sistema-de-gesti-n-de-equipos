@@ -3,6 +3,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Equipment;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentUpdateDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -51,13 +52,9 @@ public class EquipmentService {
     }
     
  
-    public Boolean deleteEquipment(Long idEquipment) {
-        try {
-            EquipmentRepository.deleteById(idEquipment);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void deleteEquipment(Long idEquipment) {
+        EquipmentModel equipment = EquipmentRepository.findById(idEquipment).orElseThrow(() -> new ResourceNotFoundException("No se encontró un equipo con el id: "+ idEquipment));
+        EquipmentRepository.deleteById(idEquipment);
     }
     
     

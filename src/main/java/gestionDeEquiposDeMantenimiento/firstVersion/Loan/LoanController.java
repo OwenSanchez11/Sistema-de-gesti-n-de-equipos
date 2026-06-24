@@ -1,10 +1,15 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.Loan;
 
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ErrorResponse;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -52,15 +57,30 @@ public class LoanController {
     }
 
     @Operation(summary = "método para borrar prestamos de la DB")
+        @ApiResponses(value = {
+        @ApiResponse(
+                responseCode = "200",
+                description ="Prestamo borrado con éxito"
+        ),
+        @ApiResponse(
+                responseCode = "404",
+                description = "Prestamo no encontrado con el id ingresado",
+                content = @Content(
+                        schema = @Schema(implementation = ErrorResponse.class)
+                )
+        ),
+        @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT - Database integrity violation",
+                content = @Content(
+                        schema = @Schema(implementation = ErrorResponse.class)
+                )
+        )
+    })
     @DeleteMapping(path = "/{idLoan}")
     public String deleteLoan(@PathVariable Long idLoan) {
-        Boolean ok = loanService.deleteLoan(idLoan);
-        if (ok) {
-            return "se borró con éxito el loan con id: "+ idLoan;
-        }
-        else {
-            return "no se encontró el loan con id: "+ idLoan;
-        }
+     loanService.deleteLoan(idLoan);
+     return "Se borró con éxito el prestamo con el id: " + idLoan;
     }
 
     

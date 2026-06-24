@@ -1,6 +1,8 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.Rol;
 
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.BusinessRuleException;
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.RolDTO.RolCreateDTO;
@@ -25,11 +27,17 @@ public class RolService {
         return rolRepository.findAll();
     }
     
-    public Optional<RolModel> getRolById(Long idRol) {
-        return rolRepository.findById(idRol);
+    public RolModel getRolById(Long idRol) {
+        return rolRepository.findById(idRol).orElseThrow(() -> new ResourceNotFoundException("No se encontró un rol con ese ID"));
     }
     
     public RolModel saveRol(RolCreateDTO request) {
+        
+        boolean rolExists = rolRepository.existsByName(request.getName());
+        
+        if (rolExists) {
+            throw new BusinessRuleException("Ya existe ese rol");
+        }
         
         RolModel rol = new RolModel();
         rol.setName(request.getName().toUpperCase());
@@ -46,17 +54,8 @@ public class RolService {
     }
     
     
-    public Boolean deleteRol(Long id) {
-        try {
-            rolRepository.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            return false;
-
-        }
+    public void deleteRol(Long id) {
+        RolModel rol = rolRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No se encontró el rol con el id"+ id));
+        rolRepository.delete(rol);
     }
-
-    
-    
-    
 }

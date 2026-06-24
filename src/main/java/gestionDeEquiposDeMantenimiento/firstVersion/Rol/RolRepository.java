@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RolRepository extends JpaRepository<RolModel, Long> {
-    
+    boolean existsByName(String name);
 }

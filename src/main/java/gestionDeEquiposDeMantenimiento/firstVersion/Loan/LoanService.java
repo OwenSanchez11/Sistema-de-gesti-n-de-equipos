@@ -115,13 +115,9 @@ public class LoanService {
     
     
     
- public Boolean deleteLoan(Long idLoan) {
-        try {
-            loanRepository.deleteById(idLoan);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+ public void deleteLoan(Long idLoan) {
+        LoanModel loan = loanRepository.findById(idLoan).orElseThrow( () -> new ResourceNotFoundException("No se encontró un prestamo con el id: "+ idLoan));
+        loanRepository.deleteById(idLoan);
     }
 
     

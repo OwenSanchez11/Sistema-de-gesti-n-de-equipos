@@ -2,6 +2,7 @@
 package gestionDeEquiposDeMantenimiento.firstVersion.User;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.BusinessRuleException;
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserResponseDTO;
@@ -27,7 +28,7 @@ public class UserService {
     }
     
     public UserResponseDTO getById(Long idUser) {
-        UserModel user = userRepository.findById(idUser).get();
+        UserModel user = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
         return new UserResponseDTO(user.getIdUsuario(), 
                 user.getName(), 
@@ -85,6 +86,12 @@ public class UserService {
         RolModel rol = rolRepository.findById(request.getIdRol())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
         
+        boolean emailExist = userRepository.existsByEmail(request.getEmail());
+        
+        if (emailExist) {
+            throw new BusinessRuleException("A user with this email already exist");
+        }
+        
         user.setActive(request.getActive());
         user.setCargo(request.getCargo());
         user.setEmail(request.getEmail());
@@ -94,13 +101,9 @@ public class UserService {
         return userRepository.save(user);
     }
     
-    public Boolean deleteUser(Long idUser) {
-        try {
-            userRepository.deleteById(idUser);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public void deleteUser(Long idUser) {
+        UserModel user = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("No se encontró el user con el id: "+ idUser));
+        userRepository.delete(user);
     }
     
     
