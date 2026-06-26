@@ -5,11 +5,13 @@ import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.BusinessRuleExcep
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolRepository;
+import gestionDeEquiposDeMantenimiento.firstVersion.Security.SecurityConfig;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserUpdateDTO;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +20,7 @@ public class UserService {
     
     private final UserRepository userRepository;
     private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
     
     public List<UserResponseDTO> getAllUsers() {
         List<UserModel> users = userRepository.findAll();
@@ -45,6 +48,10 @@ public class UserService {
         user.setActive(Boolean.TRUE);
         user.setCargo(request.getCargo());
         
+        String password = request.getPassword();
+        String passwordHash = passwordEncoder.encode(password);
+        
+        
         boolean userExist =  userRepository.existsByDocumento(request.getDocumento());
         boolean emailExist = userRepository.existsByEmail(request.getEmail());
         
@@ -60,6 +67,7 @@ public class UserService {
         
         user.setDocumento(request.getDocumento());
         user.setEmail(request.getEmail());
+        user.setPassword(passwordHash);
         user.setLastName(request.getLastName());
         user.setName(request.getName());
         user.setPhoneNumber(request.getPhoneNumber());

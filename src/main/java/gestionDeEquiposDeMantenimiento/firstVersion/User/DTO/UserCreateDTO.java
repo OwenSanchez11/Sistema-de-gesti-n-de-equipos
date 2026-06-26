@@ -21,11 +21,16 @@ public class UserCreateDTO {
     @NotBlank(message = "Last Name cannot be empty")
     private String lastName;
     
-     @Schema(description = "email del usuario", example = "juanperez@example.com")
+    @Schema(description = "email del usuario", example = "juanperez@example.com")
     @NotBlank(message = "Email cannot be empty")
     @Email(message = "Invalid email format")
     private String email;
     
+    @Schema(description = "password del usuario", example = "1234567&&**sdsafv")
+    @NotBlank(message = "password cannot be empty")
+     private String password;
+     
+     
     @Schema(description = "documento de identidad de la persona y/o usuario", example = "123456789")
     @NotBlank(message = "Document cannot be empty")
     private String documento;
