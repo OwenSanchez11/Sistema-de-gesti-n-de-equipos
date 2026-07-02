@@ -98,9 +98,29 @@
     <li>Se agregó la documentación con swagger de los modelos y las excepciones que lanza cada método</li>
 </ul>
 
+## Configuración del proyecto
+
+Por seguridad, el archivo `application.properties` no está incluido en el repositorio.
+
+Para ejecutar el proyecto:
+
+1. Crear un archivo:
+
+```text
+application.properties
+```
+
+2. Usar como referencia:
+
+```text
+application-example.properties
+```
+
+3. Configurar tus propias credenciales de base de datos y variables JWT.
 
 
-<h4>Endpoints principales</h4>
+
+
 ## 📌 Main Endpoints
 
 ### 🔐 Role
