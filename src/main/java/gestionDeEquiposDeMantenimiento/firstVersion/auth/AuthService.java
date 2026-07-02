@@ -3,6 +3,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.auth;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.InvalidCredentialsException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
+import gestionDeEquiposDeMantenimiento.firstVersion.Security.JwtService;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.auth.DTO.LoginRequestDTO;
@@ -17,6 +18,7 @@ public class AuthService {
     
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
     
     public LoginResponseDTO authenticate(LoginRequestDTO request) {
         UserModel user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new InvalidCredentialsException("Unauthorized credentiales"));
@@ -24,8 +26,9 @@ public class AuthService {
         
         
         if (passwordEncoder.matches(request.getPassword(), hashedPassword)) {
-            
-            return new LoginResponseDTO("User autenticado con éxito", Boolean.TRUE);
+            String token = jwtService.generateToken(user);
+
+            return new LoginResponseDTO("User autenticado con éxito", true, token, "Bearer");
             
         }
        throw new InvalidCredentialsException("Unauthorized");

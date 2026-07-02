@@ -15,5 +15,6 @@ import lombok.Setter;
 public class LoginResponseDTO {
     private String message;
     private Boolean authenticated;
-    
+    private String accessToken;
+    private String tokenType;
 }

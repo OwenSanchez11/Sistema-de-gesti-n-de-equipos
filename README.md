@@ -93,8 +93,11 @@
   <li>Gestión centralizada de excepciones con `@RestControllerAdvice`</li>
 </ul>
 
-<h5>Documentación con swagger</h5>
-<p>Se agregó la documentación con swagger de los modelos y las excepciones que lanza cada método</p>
+<h4>Documentación con swagger</h4>
+<ul>
+    <li>Se agregó la documentación con swagger de los modelos y las excepciones que lanza cada método</li>
+</ul>
+
 
 
 <h4>Endpoints principales</h4>
@@ -167,15 +170,24 @@
 | 500 | `Exception` | Unexpected internal server error |
 
 
-<h3>Estado actual del proyecto</h3>
-<span>Proyecto en desarrollo</span>
-<h4>Próximas mejoras</h4>
-<ul>
-  <li>Historial por equipos</li>
-  <li>querys avanzadas en la DB</li>
-  <li>Documentación de la API</li>
-  <li>Seguridad con JWT</li>
-</ul>
+## Progreso del proyecto
+
+| Funcionalidad | Estado |
+|--------------|--------|
+| CRUD completo | ✅ Completado |
+| DTOs | ✅ Completado |
+| Manejo de excepciones | ✅ Completado |
+| Encriptación de contraseñas | ✅ Completado |
+| Login de usuarios | ✅ Completado |
+| Generación de JWT | ✅ Completado |
+| Validación de JWT | 🔄 En desarrollo |
+| Configuración Spring Security | 🔄 En desarrollo |
+| Autorización por roles | 🔄 En desarrollo |
+| Docker | ⏳ Planeado |
+| Deploy | ⏳ Planeado |
+
+
+<p>Este proyecto continúa evolucionando con el objetivo de implementar una API backend segura, escalable y alineada con buenas prácticas de desarrollo profesional.</p>
 
 <h3>Autor</h3>
 Owen Sanchez - Backend Developer en formación enfocado en Java, Spring Boot y PostgreSQL.

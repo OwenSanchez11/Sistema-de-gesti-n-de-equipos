@@ -1,0 +1,52 @@
+
+package gestionDeEquiposDeMantenimiento.firstVersion.Security;
+
+import javax.crypto.SecretKey;
+
+import gestionDeEquiposDeMantenimiento.firstVersion.User.UserModel;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+
+@Service
+public class JwtService {
+    @Value("${jwt.secret-key}")
+    private String secretKey;
+
+    @Value("${jwt.expiration}")
+    private long jwtExpiration;
+
+
+    public String generateToken(UserModel user) {
+        Long id = user.getIdUsuario();
+        String role = user.getRol().getName();
+        String email = user.getEmail();
+
+        Map<String, Object> claims = new HashMap<>();
+
+        claims.put("userId", id);
+        claims.put("role", role);
+
+        return Jwts.builder()
+                .claims(claims)
+                .subject(email)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getSignKey())
+                .compact();
+
+    }
+
+    private SecretKey getSignKey() {
+        byte[] keyBytes = secretKey.getBytes();
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+}
