@@ -125,25 +125,25 @@ application-example.properties
 
 ### 🔐 Role
 
-| Method | Endpoint                     | Description             |
-| ------ | ---------------------------- | ----------------------- |
-| POST   | `/roles/save`                | Create a new role       |
-| GET    | `/roles/all`                 | Retrieve all roles      |
-| GET    | `/roles/{idRole}`            | Retrieve a role by ID   |
-| PUT    | `/roles/updateRol/{idRol}`   | Update role information |
-| DELETE | `/roles/deleteRol/{idRol}` | Delete a role           |
+| Method | Endpoint         | Description             |
+| ------ | ---------------- | ----------------------- |
+| POST   | `/roles`         | Create a new role       |
+| GET    | `/roles`         | Retrieve all roles      |
+| GET    | `/roles/{idRole}` | Retrieve a role by ID   |
+| PUT    | `/roles/{idRol}` | Update role information |
+| DELETE | `/roles/{idRol}` | Delete a role           |
 
 ---
 
 ### 👤 User
 
 | Method | Endpoint                     | Description             |
-| ------ | ---------------------------- | ----------------------- |
-| POST   | `/users/createUser`          | Create a new user       |
-| GET    | `/users/all`                 | Retrieve all users      |
-| GET    | `/users/getUser/{idUser}`    | Retrieve a user by ID   |
-| PUT    | `/users/updateUser/{idUser}` | Update user information |
-| DELETE | `/users/deleteUser/{idUser}` | Delete a user           |
+| ------ |------------------------------| ----------------------- |
+| POST   | `/users`                     | Create a new user       |
+| GET    | `/users`                     | Retrieve all users      |
+| GET    | `/users/{idUser}`            | Retrieve a user by ID   |
+| PUT    | `/users/{idUser}` | Update user information |
+| DELETE | `/users/{idUser}` | Delete a user           |
 
 ---
 
@@ -151,23 +151,23 @@ application-example.properties
 
 | Method | Endpoint                           | Description                  |
 | ------ | ---------------------------------- | ---------------------------- |
-| POST   | `/equipments/saveEquipment`        | Register a new equipment     |
-| GET    | `/equipments/all`                  | Retrieve all equipment       |
+| POST   | `/equipments`        | Register a new equipment     |
+| GET    | `/equipments`                  | Retrieve all equipment       |
 | GET    | `/equipments/{idEquipment}`        | Retrieve equipment by ID     |
-| PUT    | `/equipments/update/{idEquipment}` | Update equipment information |
-| DELETE | `/equipments/delete/{idEquipment}` | Delete equipment             |
+| PUT    | `/equipments/{idEquipment}` | Update equipment information |
+| DELETE | `/equipments/{idEquipment}` | Delete equipment             |
 
 ---
 
 ### 📦 Loan
 
-| Method | Endpoint                    | Description               |
-| ------ | --------------------------- | ------------------------- |
-| POST   | `/loan/saveLoan`            | Create a new loan         |
-| GET    | `/loan/all`                 | Retrieve all loans        |
-| GET    | `/loan/{idLoan}`            | Retrieve a loan by ID     |
-| PUT    | `/loan/updateLoan/{idLoan}` | Register equipment return |
-| DELETE | `/loan/delete/{idLoan}`     | Delete a loan record      |
+| Method | Endpoint                  | Description               |
+| ------ | ------------------------- | ------------------------- |
+| POST   | `/loan`            | Create a new loan         |
+| GET    | `/loan`                | Retrieve all loans        |
+| GET    | `/loan/{idLoan}`          | Retrieve a loan by ID     |
+| PUT    | `/loan/{idLoan}` | Register equipment return |
+| DELETE | `/loan/{idLoan}`   | Delete a loan record      |
 
 ---
 
@@ -175,10 +175,10 @@ application-example.properties
 
 | Method | Endpoint                                         | Description                         |
 | ------ | ------------------------------------------------ | ----------------------------------- |
-| POST   | `/maintenance/saveMaintenance`                   | Create a maintenance record         |
-| GET    | `/maintenance/all`                               | Retrieve all maintenance records    |
-| GET    | `/maintenance/getById/{idMaintenance}`           | Retrieve a maintenance record by ID |
-| PUT    | `/maintenance/updateMaintenance/{idMaintenance}` | Update maintenance status           |
+| POST   | `/maintenance`                   | Create a maintenance record         |
+| GET    | `/maintenance`                               | Retrieve all maintenance records    |
+| GET    | `/maintenance/{idMaintenance}`           | Retrieve a maintenance record by ID |
+| PUT    | `/maintenance/{idMaintenance}` | Update maintenance status           |
 
 
 ## ⚠️ API Error Handling
@@ -188,7 +188,8 @@ application-example.properties
 | 404 | `ResourceNotFoundException` | Requested resource does not exist |
 | 409 | `BusinessRuleException` | Operation violates business logic rules |
 | 500 | `Exception` | Unexpected internal server error |
-
+| 401 | `InvalidCredentialesException` | Unauthorized | 
+| 400 | `Validation exception` | Validation error |
 
 ## Progreso del proyecto
 
