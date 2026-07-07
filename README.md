@@ -201,8 +201,8 @@ application-example.properties
 | Encriptación de contraseñas | ✅ Completado |
 | Login de usuarios | ✅ Completado |
 | Generación de JWT | ✅ Completado |
-| Validación de JWT | 🔄 En desarrollo |
-| Configuración Spring Security | 🔄 En desarrollo |
+| Validación de JWT | ✅ Completado |
+| Configuración Spring Security | ✅ Completado |
 | Autorización por roles | 🔄 En desarrollo |
 | Docker | ⏳ Planeado |
 | Deploy | ⏳ Planeado |
