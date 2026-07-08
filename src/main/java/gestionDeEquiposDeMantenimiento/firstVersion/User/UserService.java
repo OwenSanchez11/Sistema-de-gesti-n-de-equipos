@@ -42,6 +42,7 @@ public class UserService {
     
     
     public UserResponseDTO saveUser(UserCreateDTO request) {
+
         RolModel rol = rolRepository.findById(request.getIdRol())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
         UserModel user = new UserModel();

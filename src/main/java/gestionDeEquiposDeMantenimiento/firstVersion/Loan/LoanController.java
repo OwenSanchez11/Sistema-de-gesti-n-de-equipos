@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,24 +35,28 @@ public class LoanController {
     
     @Operation(summary = "método para obtener todos los prestamos guardados en la DB")
     @GetMapping
+    @PreAuthorize("hasAnyRol('ADMIN', 'TECNICO')")
     public List<LoanResponseDTO> getAllLoan() {
         return  this.loanService.getAllLoan();
     }
     
     @Operation(summary = "método para obtener prestamos con su respectiva id con la que se guardó en la DB")
     @GetMapping(path = "/{idLoan}")
+    @PreAuthorize("hasAnyRol('ADMIN', 'TECNICO')")
     public LoanResponseDTO getLoanById(@PathVariable Long idLoan) {
         return this.loanService.getLoanById(idLoan);
     }
     
     @Operation(summary = "método para crear y guardar un nuevo prestamo en la DB")
     @PostMapping
+    @PreAuthorize("hasAnyRol('ADMIN', 'TECNICO')")
     public LoanResponseDTO saveNewLoan(@Valid @RequestBody LoanCreateDTO request){
         return this.loanService.saveLoan(request);
     }
     
     @Operation(summary = "método para actualizar el estado del prestamo en la DB usando las id de los prestamos")
     @PutMapping(path = "/{idLoan}")
+    @PreAuthorize("hasAnyRol('ADMIN', 'TECNICO')")
     public LoanResponseDTO updateLoan(@Valid @RequestBody LoanUpdateDTO request, @PathVariable Long idLoan) {
         return this.loanService.updateLoan(request, idLoan);
     }
@@ -78,6 +83,7 @@ public class LoanController {
         )
     })
     @DeleteMapping(path = "/{idLoan}")
+    @PreAuthorize("hasRol('ADMIN')")
     public String deleteLoan(@PathVariable Long idLoan) {
      loanService.deleteLoan(idLoan);
      return "Se borró con éxito el prestamo con el id: " + idLoan;

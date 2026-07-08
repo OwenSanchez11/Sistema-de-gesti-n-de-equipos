@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +50,7 @@ public class UserController {
         )
     })
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECNICO')")
     public List<UserResponseDTO> getAllUsers() {
         return this.userService.getAllUsers();
     }
@@ -67,6 +69,7 @@ public class UserController {
         ))
     })
     @GetMapping(path = "/{idUser}")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponseDTO getUserById(@PathVariable Long idUser) {
         return this.userService.getById(idUser);
     }
@@ -95,6 +98,7 @@ public class UserController {
         )
     })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponseDTO createUser(@Valid @RequestBody UserCreateDTO request) {
         return this.userService.saveUser(request);
     }
@@ -121,6 +125,7 @@ public class UserController {
         )
     })
     @PutMapping(path = "/{idUser}")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserModel editarUser(@Valid @RequestBody UserUpdateDTO request, @PathVariable Long idUser) {
         return this.userService.editarUser(request, idUser);
     }
@@ -147,6 +152,7 @@ public class UserController {
         )
     })
     @DeleteMapping(path = "/{idUser}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(@PathVariable Long idUser) {
         userService.deleteUser(idUser);
     }

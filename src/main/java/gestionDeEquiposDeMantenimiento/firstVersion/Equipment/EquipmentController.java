@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,12 +34,14 @@ public class EquipmentController {
     
     @Operation(summary = "método para obtener todos los los equipos guardados en la DB")
     @GetMapping
+    @PreAuthorize("hasAnyRol('ADMIN', 'TECNICO')")
     public List<EquipmentModel> getAllEquipments() {
         return this.EquipmentService.getAllEquipment();
 } 
     
     @Operation(summary = "método para obtener los equipos con su id guardad en la DB")
     @GetMapping(path = "/{idEquipment}")
+    @PreAuthorize("hasAnyRol('ADMIN', 'TECNICO')")
     public Optional<EquipmentModel> getEquipmentById(@PathVariable Long idEquipment) {
         return this.EquipmentService.getEquipmentById(idEquipment);
     }
@@ -46,12 +49,14 @@ public class EquipmentController {
     
     @Operation(summary = "método para guardar un equipo en la DB ")
     @PostMapping
+    @PreAuthorize("hasRol('ADMIN')")
      public EquipmentModel saveEquipment(@Valid @RequestBody EquipmentCreateDTO request) {
          return this.EquipmentService.saveEquipment(request);
      }
      
      @Operation(summary = "Método para actulizar un equipo")
      @PutMapping(path = "/{idEquipment}")
+     @PreAuthorize("hasRol('ADMIN')")
      public EquipmentModel updateEquipmentById(@Valid @RequestBody EquipmentUpdateDTO request, @PathVariable Long idEquipment) {
          return this.EquipmentService.updateEquipment(request, idEquipment);
 
@@ -79,6 +84,7 @@ public class EquipmentController {
         )
     })
      @DeleteMapping(path = "/{idEquipment}")
+     @PreAuthorize("hasRol('ADMIN')")
      public String deleteEquipment(@PathVariable Long idEquipment) {
         EquipmentService.deleteEquipment(idEquipment);
         return "El equipo con el id: "+ idEquipment + " ha sido borrado con éxito";

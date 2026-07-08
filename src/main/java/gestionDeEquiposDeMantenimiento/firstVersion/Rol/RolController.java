@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,6 +47,7 @@ public class RolController {
         )
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<RolModel> getAllRoles() {
         return this.rolService.getAllRoles();
     }
@@ -65,6 +67,7 @@ public class RolController {
         @ApiResponse
     })
     @GetMapping(path = "/{idRol}")
+    @PreAuthorize("hasRole('ADMIN')")
     public RolModel getRolById(@PathVariable Long idRol) {
         return this.rolService.getRolById(idRol);
     }
@@ -88,6 +91,7 @@ public class RolController {
         )),
     })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public RolModel saveRol(@RequestBody RolCreateDTO request) {
         return this.rolService.saveRol(request);
     }
@@ -111,6 +115,7 @@ public class RolController {
         )),
     })
     @PutMapping(path = "/{idRol}")
+    @PreAuthorize("hasRole('ADMIN')")
     public RolModel updateRol(@RequestBody RolUpdateDTO request, @PathVariable Long idRol) {
         return this.rolService.updateRol(request, idRol);
     }
@@ -137,6 +142,7 @@ public class RolController {
         )),
     })
     @DeleteMapping(path = "/{idRol}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteRol(@PathVariable Long idRol) {
         rolService.deleteRol(idRol);
         return "rol con el id " + idRol + "ha sido borrado con éxito";
