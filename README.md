@@ -119,6 +119,71 @@ application-example.properties
 3. Configurar tus propias credenciales de base de datos y variables JWT.
 
 
+## 🔐 Autorización basada en roles
+
+La API implementa un sistema de autorización utilizando **Spring Security**, **JWT (JSON Web Token)** y **roles almacenados en la base de datos**.
+
+Después de que un usuario inicia sesión correctamente, se genera un JWT que contiene la información necesaria para identificar al usuario durante las siguientes peticiones.
+
+En cada solicitud protegida:
+
+1. El cliente envía el token en el encabezado `Authorization`.
+2. El `JwtAuthenticationFilter` valida el token.
+3. Si el token es válido, el usuario es autenticado y su información se almacena en el `SecurityContextHolder`.
+4. Spring Security verifica los permisos del usuario mediante las anotaciones `@PreAuthorize`.
+
+Los permisos se controlan utilizando los roles asignados a cada usuario. Actualmente el sistema implementa los siguientes:
+
+- **ADMIN**
+- **TECNICO**
+
+Cada endpoint puede restringir el acceso a uno o varios roles utilizando anotaciones como:
+
+```java
+@PreAuthorize("hasRole('ADMIN')")
+```
+
+o
+
+```java
+@PreAuthorize("hasAnyRole('ADMIN', 'TECNICO')")
+```
+
+Este enfoque permite separar la autenticación de la autorización, facilitando la administración de permisos y el mantenimiento del sistema.
+
+---
+
+## 🚀 Inicialización automática de la aplicación
+
+La aplicación incorpora un mecanismo de inicialización automática mediante la interfaz `CommandLineRunner`.
+
+Al iniciar el proyecto por primera vez con una base de datos vacía, la clase `DatabaseInitializer` verifica que existan los datos mínimos necesarios para que el sistema pueda utilizarse.
+
+Actualmente realiza las siguientes tareas:
+
+- Crea automáticamente los roles necesarios para el funcionamiento del sistema si no existen.
+- Crea automáticamente el usuario administrador inicial si no existe.
+
+Esto resuelve el problema del **primer usuario**, ya que la aplicación no cuenta con un endpoint de registro público. Todos los usuarios son creados posteriormente por un administrador autorizado.
+
+Las credenciales del administrador inicial no se encuentran escritas directamente en el código fuente. En su lugar, se leen desde el archivo `application.properties`, lo que facilita su configuración sin necesidad de modificar la implementación.
+
+```properties
+app.admin.email=your_admin_email
+app.admin.password=your_admin_password
+```
+
+Durante la inicialización:
+
+1. Se verifica si existe un usuario con el correo configurado.
+2. Si no existe, se recupera el rol **ADMIN** desde la base de datos.
+3. Se crea el usuario administrador.
+4. La contraseña es cifrada mediante **BCrypt** utilizando `PasswordEncoder`.
+5. Finalmente, el usuario es almacenado en la base de datos.
+
+Gracias a este mecanismo, cualquier persona que ejecute el proyecto con una base de datos vacía podrá iniciar sesión inmediatamente utilizando las credenciales configuradas en `application.properties`, sin necesidad de realizar configuraciones adicionales o crear manualmente el primer usuario.
+
+
 
 
 ## 📌 Main Endpoints

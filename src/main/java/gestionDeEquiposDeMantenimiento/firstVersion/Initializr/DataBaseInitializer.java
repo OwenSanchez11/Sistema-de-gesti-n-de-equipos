@@ -5,6 +5,7 @@ import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,12 @@ public class DataBaseInitializer implements CommandLineRunner {
     private final RolRepository rolRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${app.admin.email}")
+    private String adminEmail;
+
+    @Value("${app.admin.password}")
+    private String adminPassword;
 
     private void initializeRole() {
 
@@ -33,13 +40,13 @@ public class DataBaseInitializer implements CommandLineRunner {
         RolModel adminRole = rolRepository.findByName("ADMIN")
                 .orElseThrow(() -> new IllegalStateException("El rol ADMIN no existe."));
 
-        if (!userRepository.existsByEmail("admin@admin.com")) {
+        if (!userRepository.existsByEmail(adminEmail)) {
 
             UserModel user = new UserModel();
             user.setName("ADMIN");
             user.setLastName("ADMIN");
-            user.setEmail("admin@admin.com");
-            user.setPassword(passwordEncoder.encode("123456"));
+            user.setEmail(adminEmail);
+            user.setPassword(passwordEncoder.encode(adminPassword));
             user.setActive(true);
             user.setDocumento("!11111");
             user.setCargo("admin");
