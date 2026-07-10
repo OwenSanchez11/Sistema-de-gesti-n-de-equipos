@@ -7,6 +7,9 @@ import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundE
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,8 +19,12 @@ public class EquipmentService {
     
     private final EquipmentRepository EquipmentRepository;
     
-    public List<EquipmentModel> getAllEquipment() {
-        return EquipmentRepository.findAll();
+    public Page<EquipmentModel> obtenerEquipmentPorPagina(int numPagina, int tamañoPagina) {
+        Pageable pageable = PageRequest.of(numPagina, tamañoPagina);
+        Page<EquipmentModel> equipment = EquipmentRepository.findAll(pageable);
+
+        return equipment;
+
     }
     
     public Optional<EquipmentModel> getEquipmentById(Long idEquipment) 

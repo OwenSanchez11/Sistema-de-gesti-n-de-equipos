@@ -49,7 +49,7 @@ public class RolController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<RolModel> getAllRoles() {
-        return this.rolService.getAllRoles();
+        return rolService.getAllRoles();
     }
     
     @Operation(summary = "método para obtener los roles con su respectiva id con la que se encuentra guardado en la DB")
@@ -69,7 +69,7 @@ public class RolController {
     @GetMapping(path = "/{idRol}")
     @PreAuthorize("hasRole('ADMIN')")
     public RolModel getRolById(@PathVariable Long idRol) {
-        return this.rolService.getRolById(idRol);
+        return rolService.getRolById(idRol);
     }
     
     @Operation(summary = "método para crear y guardar roles dentro de la DB")
@@ -93,7 +93,7 @@ public class RolController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public RolModel saveRol(@RequestBody RolCreateDTO request) {
-        return this.rolService.saveRol(request);
+        return rolService.saveRol(request);
     }
     
     @Operation(summary = "método para actualizar o editar los roles en la DB")
@@ -117,7 +117,7 @@ public class RolController {
     @PutMapping(path = "/{idRol}")
     @PreAuthorize("hasRole('ADMIN')")
     public RolModel updateRol(@RequestBody RolUpdateDTO request, @PathVariable Long idRol) {
-        return this.rolService.updateRol(request, idRol);
+        return rolService.updateRol(request, idRol);
     }
     
     @Operation(summary = "método para borrar roles dentro de la DB")

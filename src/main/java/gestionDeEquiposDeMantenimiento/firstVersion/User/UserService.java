@@ -5,12 +5,14 @@ import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.BusinessRuleExcep
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolRepository;
-import gestionDeEquiposDeMantenimiento.firstVersion.Security.SecurityConfig;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserUpdateDTO;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +23,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final RolRepository rolRepository;
     private final PasswordEncoder passwordEncoder;
-    
-    public List<UserResponseDTO> getAllUsers() {
-        List<UserModel> users = userRepository.findAll();
-        return users.stream().map(user -> new UserResponseDTO(user.getIdUsuario(), 
-                user.getName(), user.getLastName(),user.getActive(), user.getCargo()
-        ))
-        .toList();
+
+    public Page<UserResponseDTO> obtenerUsersPorPagina(int numPagina, int tamañoPagina) {
+        Pageable pageable = PageRequest.of(numPagina, tamañoPagina);
+        Page<UserModel> users = userRepository.findAll(pageable);
+
+        return users.map(this::mapToResponse);
+
     }
-    
+
+
     public UserResponseDTO getById(Long idUser) {
         UserModel user = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
@@ -114,6 +117,8 @@ public class UserService {
         UserModel user = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("No se encontró el user con el id: "+ idUser));
         userRepository.delete(user);
     }
-    
+
+
+
     
 }

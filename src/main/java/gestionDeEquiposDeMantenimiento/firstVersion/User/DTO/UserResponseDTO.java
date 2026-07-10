@@ -16,16 +16,16 @@ public class UserResponseDTO {
     @Schema(description = "se mostrará como respuesta el nombre que tenga el use guardado en la DBr", example ="Juan")
     private String name;
     @Schema(description = "se mostrará como respuesta el apellido que tenga el user guardado en la DB", example= "Perez")
-    private String lastName;
+    private String email;
     @Schema(description = "Se mostrará si se encuentra activo o no el user", example = "true/false")
     private Boolean active;
     @Schema(description = "Se mostrará como respuesta el cargo que tenga el user", example = "Jefe, empleado, etc")
     private String cargo;
 
-    public UserResponseDTO(Long userId, String name, String lastName, Boolean active, String cargo) {
+    public UserResponseDTO(Long userId, String name, String email, Boolean active, String cargo) {
         this.userId = userId;
         this.name = name;
-        this.lastName = lastName;
+        this.email = email;
         this.active = active;
         this.cargo = cargo;
     }

@@ -11,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
 public class DataBaseInitializer implements CommandLineRunner {
 
     private final RolRepository rolRepository;
@@ -23,6 +22,14 @@ public class DataBaseInitializer implements CommandLineRunner {
 
     @Value("${app.admin.password}")
     private String adminPassword;
+
+    public DataBaseInitializer(RolRepository rolRepository,
+                               UserRepository userRepository,
+                               PasswordEncoder passwordEncoder) {
+        this.rolRepository = rolRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     private void initializeRole() {
 

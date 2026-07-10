@@ -14,15 +14,9 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Equipments", description = "todas las operaciones relacionadas con los equipos del sistema")
 @RestController
@@ -34,16 +28,20 @@ public class EquipmentController {
     
     @Operation(summary = "método para obtener todos los los equipos guardados en la DB")
     @GetMapping
-    @PreAuthorize("hasAnyRol('ADMIN', 'TECNICO')")
-    public List<EquipmentModel> getAllEquipments() {
-        return this.EquipmentService.getAllEquipment();
-} 
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECNICO')")
+    public Page<EquipmentModel> obtenerEquipments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return EquipmentService.obtenerEquipmentPorPagina(page, size);
+
+    }
     
     @Operation(summary = "método para obtener los equipos con su id guardad en la DB")
     @GetMapping(path = "/{idEquipment}")
-    @PreAuthorize("hasAnyRol('ADMIN', 'TECNICO')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TECNICO')")
     public Optional<EquipmentModel> getEquipmentById(@PathVariable Long idEquipment) {
-        return this.EquipmentService.getEquipmentById(idEquipment);
+        return EquipmentService.getEquipmentById(idEquipment);
     }
     
     
@@ -51,14 +49,14 @@ public class EquipmentController {
     @PostMapping
     @PreAuthorize("hasRol('ADMIN')")
      public EquipmentModel saveEquipment(@Valid @RequestBody EquipmentCreateDTO request) {
-         return this.EquipmentService.saveEquipment(request);
+         return EquipmentService.saveEquipment(request);
      }
      
      @Operation(summary = "Método para actulizar un equipo")
      @PutMapping(path = "/{idEquipment}")
      @PreAuthorize("hasRol('ADMIN')")
      public EquipmentModel updateEquipmentById(@Valid @RequestBody EquipmentUpdateDTO request, @PathVariable Long idEquipment) {
-         return this.EquipmentService.updateEquipment(request, idEquipment);
+         return EquipmentService.updateEquipment(request, idEquipment);
 
      }
      

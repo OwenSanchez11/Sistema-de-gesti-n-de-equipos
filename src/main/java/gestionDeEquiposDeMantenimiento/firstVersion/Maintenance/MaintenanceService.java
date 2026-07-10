@@ -13,6 +13,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -24,17 +27,11 @@ public class MaintenanceService {
     private final UserRepository userRepository;
     
     
-    public List<MaintenanceResponseDTO> getAllMaintenance() {
-        List<MaintenanceModel> maintenance = maintenanceRepository.findAll();
-        return maintenance.stream().map(m -> new MaintenanceResponseDTO(
-                m.getIdMaintenance(), 
-                m.getEquipment().getIdEquipment(), 
-                m.getUserRegister().getIdUsuario(), 
-                m.getStartDate(), 
-                m.getEndDate(), 
-                m.getDescription(), 
-                m.getPriceMaintenance(), 
-                m.getMaintenanceStatus())).toList();
+    public Page<MaintenanceResponseDTO> obtenerMantenimientosPorPagina(int numPagina, int tamañoPagina) {
+        Pageable pageable = PageRequest.of(numPagina, tamañoPagina);
+        Page<MaintenanceModel> maintenance = maintenanceRepository.findAll(pageable);
+
+        return maintenance.map(this::mapToResponse);
     }
     
     

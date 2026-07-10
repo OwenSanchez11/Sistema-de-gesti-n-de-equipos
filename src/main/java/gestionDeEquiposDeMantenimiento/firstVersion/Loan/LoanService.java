@@ -18,6 +18,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,16 +32,12 @@ public class LoanService {
     private final UserRepository userRepository;
     
     
-    public List<LoanResponseDTO> getAllLoan() {
-         List<LoanModel> loans = loanRepository.findAll();
-         return loans.stream().map(loan -> new LoanResponseDTO(loan.getIdLoan(), 
-                 loan.getEquipment().getIdEquipment(), 
-                 loan.getEquipment().getName(), 
-                 loan.getUserReceiver().getName(), loan.getUserDeliverer().getName(),
-                 loan.getObservationsOut(),loan.getObservationsReturn(),
-                 loan.getLoanDate(), loan.getLoanStatus())).toList();
+    public Page<LoanResponseDTO> obtenerPrestamosPorPagina(int numPagina, int tamañoPagina) {
+        Pageable pageable = PageRequest.of(numPagina, tamañoPagina);
+        Page<LoanModel> page = loanRepository.findAll(pageable);
+
+        return page.map(this::mapToResponse);
     }
-    
     public LoanResponseDTO getLoanById(Long idLoan) {
         LoanModel loan = loanRepository.findById(idLoan).orElseThrow(() -> new ResourceNotFoundException("Loan not found"));
         
