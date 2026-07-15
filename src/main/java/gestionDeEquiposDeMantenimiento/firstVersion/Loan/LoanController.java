@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,9 +33,13 @@ public class LoanController {
     @PreAuthorize("hasAnyRole('ADMIN', 'TECNICO')")
     public Page<LoanResponseDTO> obtenerPrestamo(
             @RequestParam(defaultValue = "0" ) int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "idLoan") String sortyBy,
+            @RequestParam(defaultValue = "DESC") Sort.Direction direction,
+            @RequestParam(required = false) Long idEquipment
+    ) {
 
-        return loanService.obtenerPrestamosPorPagina(page, size);
+        return loanService.obtenerPrestamosPorPagina(page, size, sortyBy, direction, idEquipment);
     }
     
     @Operation(summary = "método para obtener prestamos con su respectiva id con la que se guardó en la DB")
@@ -80,7 +85,7 @@ public class LoanController {
         )
     })
     @DeleteMapping(path = "/{idLoan}")
-    @PreAuthorize("hasRol('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteLoan(@PathVariable Long idLoan) {
      loanService.deleteLoan(idLoan);
      return "Se borró con éxito el prestamo con el id: " + idLoan;

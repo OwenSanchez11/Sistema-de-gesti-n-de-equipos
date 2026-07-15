@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +26,21 @@ public class UserService {
     private final RolRepository rolRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Page<UserResponseDTO> obtenerUsersPorPagina(int numPagina, int tamañoPagina) {
-        Pageable pageable = PageRequest.of(numPagina, tamañoPagina);
-        Page<UserModel> users = userRepository.findAll(pageable);
+    public Page<UserResponseDTO> obtenerUsersPorPagina(int numPagina, int tamañoPagina, String sortBy, Sort.Direction direction, Boolean active, String email) {
+        Pageable pageable = PageRequest.of(numPagina,
+                tamañoPagina,
+                Sort.by(direction, sortBy));
+
+        Page<UserModel> users;
+        Specification<UserModel> spec = Specification.unrestricted();
+        spec = spec.and(UserSpecification.hasActive(active));
+        spec = spec.and(UserSpecification.hasEmail(email));
+
+
+        users = userRepository.findAll(spec, pageable);
+
+
+
 
         return users.map(this::mapToResponse);
 

@@ -188,6 +188,14 @@ Gracias a este mecanismo, cualquier persona que ejecute el proyecto con una base
 
 ## 📌 Main Endpoints
 
+
+### 🔏 Autenticación
+| Method | Endpoint      | Description |
+| ------ |---------------|-------------|
+| POST   | `/auth/login` | User Login  |
+
+
+
 ### 🔐 Role
 
 | Method | Endpoint         | Description             |
@@ -268,7 +276,7 @@ Gracias a este mecanismo, cualquier persona que ejecute el proyecto con una base
 | Generación de JWT | ✅ Completado |
 | Validación de JWT | ✅ Completado |
 | Configuración Spring Security | ✅ Completado |
-| Autorización por roles | 🔄 En desarrollo |
+| Autorización por roles | ✅ Completado |
 | Docker | ⏳ Planeado |
 | Deploy | ⏳ Planeado |
 

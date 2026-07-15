@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
@@ -27,9 +29,15 @@ public class MaintenanceService {
     private final UserRepository userRepository;
     
     
-    public Page<MaintenanceResponseDTO> obtenerMantenimientosPorPagina(int numPagina, int tamañoPagina) {
-        Pageable pageable = PageRequest.of(numPagina, tamañoPagina);
-        Page<MaintenanceModel> maintenance = maintenanceRepository.findAll(pageable);
+    public Page<MaintenanceResponseDTO> obtenerMantenimientosPorPagina(int numPagina, int tamañoPagina, String sortBy, Sort.Direction direction, Long idEquipment) {
+        Pageable pageable = PageRequest.of(numPagina, tamañoPagina, Sort.by(direction, sortBy));
+
+        Specification<MaintenanceModel> spec = Specification.unrestricted();
+        Page<MaintenanceModel> maintenance;
+        spec = spec.and(MaintenanceSpecification.hasEquipmentId(idEquipment));
+
+        maintenance = maintenanceRepository.findAll(spec, pageable);
+
 
         return maintenance.map(this::mapToResponse);
     }

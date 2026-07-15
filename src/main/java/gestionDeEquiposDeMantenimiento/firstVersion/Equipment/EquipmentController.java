@@ -2,6 +2,7 @@
 package gestionDeEquiposDeMantenimiento.firstVersion.Equipment;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentCreateDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentUpdateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,32 +31,36 @@ public class EquipmentController {
     @Operation(summary = "método para obtener todos los los equipos guardados en la DB")
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'TECNICO')")
-    public Page<EquipmentModel> obtenerEquipments(
+    public Page<EquipmentResponseDTO> obtenerEquipments(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortyBy,
+            @RequestParam(defaultValue = "DESC") Sort.Direction direction,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer seriesNum) {
 
-        return EquipmentService.obtenerEquipmentPorPagina(page, size);
+        return EquipmentService.obtenerEquipmentPorPagina(page, size, sortyBy, direction, name, seriesNum);
 
     }
     
     @Operation(summary = "método para obtener los equipos con su id guardad en la DB")
     @GetMapping(path = "/{idEquipment}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TECNICO')")
-    public Optional<EquipmentModel> getEquipmentById(@PathVariable Long idEquipment) {
+    public EquipmentResponseDTO getEquipmentById(@PathVariable Long idEquipment) {
         return EquipmentService.getEquipmentById(idEquipment);
     }
     
     
     @Operation(summary = "método para guardar un equipo en la DB ")
     @PostMapping
-    @PreAuthorize("hasRol('ADMIN')")
-     public EquipmentModel saveEquipment(@Valid @RequestBody EquipmentCreateDTO request) {
+    @PreAuthorize("hasRole('ADMIN')")
+     public EquipmentResponseDTO saveEquipment(@Valid @RequestBody EquipmentCreateDTO request) {
          return EquipmentService.saveEquipment(request);
      }
      
      @Operation(summary = "Método para actulizar un equipo")
      @PutMapping(path = "/{idEquipment}")
-     @PreAuthorize("hasRol('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
      public EquipmentModel updateEquipmentById(@Valid @RequestBody EquipmentUpdateDTO request, @PathVariable Long idEquipment) {
          return EquipmentService.updateEquipment(request, idEquipment);
 
@@ -82,7 +88,7 @@ public class EquipmentController {
         )
     })
      @DeleteMapping(path = "/{idEquipment}")
-     @PreAuthorize("hasRol('ADMIN')")
+     @PreAuthorize("hasRole('ADMIN')")
      public String deleteEquipment(@PathVariable Long idEquipment) {
         EquipmentService.deleteEquipment(idEquipment);
         return "El equipo con el id: "+ idEquipment + " ha sido borrado con éxito";

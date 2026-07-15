@@ -2,14 +2,16 @@
 package gestionDeEquiposDeMantenimiento.firstVersion.Equipment;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentCreateDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO.EquipmentUpdateDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.BusinessRuleException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,22 +21,48 @@ public class EquipmentService {
     
     private final EquipmentRepository EquipmentRepository;
     
-    public Page<EquipmentModel> obtenerEquipmentPorPagina(int numPagina, int tamañoPagina) {
-        Pageable pageable = PageRequest.of(numPagina, tamañoPagina);
-        Page<EquipmentModel> equipment = EquipmentRepository.findAll(pageable);
+    public Page<EquipmentResponseDTO> obtenerEquipmentPorPagina(int numPagina, int tamañoPagina, String sortBy, Sort.Direction direction, String name, Integer seriesNum) {
+        Pageable pageable = PageRequest.of(numPagina, tamañoPagina, Sort.by(direction, sortBy));
+        Page<EquipmentModel> equipment;
 
-        return equipment;
+        Specification<EquipmentModel> spec = Specification.unrestricted();
+        spec = spec.and(EquipmentSpecification.hasEquipmentName(name));
+        spec = spec.and(EquipmentSpecification.hasEquipmentSeriesNum(seriesNum));
 
+        equipment = EquipmentRepository.findAll(spec, pageable);
+
+        return equipment.map(this::mapToResponse);
     }
     
-    public Optional<EquipmentModel> getEquipmentById(Long idEquipment) 
-    {
-        return EquipmentRepository.findById(idEquipment);
+    public EquipmentResponseDTO getEquipmentById(Long idEquipment)  {
+
+        EquipmentModel equipment = EquipmentRepository.findById(idEquipment).orElseThrow(() -> new ResourceNotFoundException("Equipment not found"));
+
+
+        return new EquipmentResponseDTO(
+                equipment.getIdEquipment(),
+                equipment.getCodeInventory(),
+                equipment.getName(),
+                equipment.getDescription(),
+                equipment.getBrand(),
+                equipment.getModel(),
+                equipment.getSeriesNum(),
+                equipment.getStatus(),
+                equipment.getLocation(),
+                equipment.getActive()
+                );
     }
    
     
-    public EquipmentModel saveEquipment(EquipmentCreateDTO equip) {
+    public EquipmentResponseDTO saveEquipment(EquipmentCreateDTO equip) {
+
         EquipmentModel equipment = new EquipmentModel();
+        boolean EquipmentExistsByCodeInventory = EquipmentRepository.existsBycodeInventory(equip.getCodeInventory());
+
+        if (EquipmentExistsByCodeInventory) {
+            throw new BusinessRuleException("A equipment with that code already Exists");
+        }
+
         equipment.setName(equip.getName());
         equipment.setCodeInventory(equip.getCodeInventory());
         equipment.setDescription(equip.getDescription());
@@ -44,8 +72,10 @@ public class EquipmentService {
         equipment.setStatus(equip.getStatus());
         equipment.setLocation(equip.getLocation());
         equipment.setActive(Boolean.TRUE);
-        
-        return EquipmentRepository.save(equipment);
+
+        EquipmentModel newEquipment = EquipmentRepository.save(equipment);
+
+        return mapToResponse(newEquipment);
     }
     
     
@@ -65,6 +95,21 @@ public class EquipmentService {
     }
     
     
-    
+
+    private EquipmentResponseDTO mapToResponse(EquipmentModel equipment) {
+        return new EquipmentResponseDTO(
+                equipment.getIdEquipment(),
+                equipment.getCodeInventory(),
+                equipment.getName(),
+                equipment.getDescription(),
+                equipment.getBrand(),
+                equipment.getModel(),
+                equipment.getSeriesNum(),
+                equipment.getStatus(),
+                equipment.getLocation(),
+                equipment.getActive()
+        );
+    }
+
     
 }

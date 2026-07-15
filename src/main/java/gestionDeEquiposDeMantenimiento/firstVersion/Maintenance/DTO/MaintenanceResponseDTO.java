@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
 
-@Schema(name= "LoanCreateDTO" , description  ="Respuesta que se le da al usuario cuando quiere revisar un mantenimiento")
+@Schema(name= "MaintenanceResponseDTO" , description  ="Respuesta que se le da al usuario cuando quiere revisar un mantenimiento")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record MaintenanceResponseDTO(
         @Schema(description = "mostrará el id del mantenimiento", example = "1, 2, 3")

@@ -21,6 +21,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,9 +34,13 @@ public class LoanService {
     private final UserRepository userRepository;
     
     
-    public Page<LoanResponseDTO> obtenerPrestamosPorPagina(int numPagina, int tamañoPagina) {
-        Pageable pageable = PageRequest.of(numPagina, tamañoPagina);
-        Page<LoanModel> page = loanRepository.findAll(pageable);
+    public Page<LoanResponseDTO> obtenerPrestamosPorPagina(int numPagina, int tamañoPagina, String sortBy, Sort.Direction direction, Long idEquipment) {
+        Pageable pageable = PageRequest.of(numPagina, tamañoPagina, Sort.by(direction, sortBy));
+        Page<LoanModel> page;
+        Specification<LoanModel> spec = Specification.unrestricted();
+        spec = spec.and(LoanSpecification.hasIdEquipment(idEquipment));
+
+        page = loanRepository.findAll(spec, pageable);
 
         return page.map(this::mapToResponse);
     }

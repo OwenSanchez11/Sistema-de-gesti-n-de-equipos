@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,9 +48,13 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ADMIN', 'TECNICO')")
     public Page<UserResponseDTO> obtenerUsersPage(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortyBy,
+            @RequestParam(defaultValue = "DESC")Sort.Direction direction,
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(required = false) String email) {
 
-        return userService.obtenerUsersPorPagina(page, size);
+        return userService.obtenerUsersPorPagina(page, size, sortyBy, direction, active, email);
 
     }
     
@@ -154,7 +159,5 @@ public class UserController {
     public void deleteUser(@PathVariable Long idUser) {
         userService.deleteUser(idUser);
     }
-
-
     
 }

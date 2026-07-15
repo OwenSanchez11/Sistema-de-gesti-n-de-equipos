@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +25,14 @@ public class MaintenanceController {
     @PreAuthorize("hasAnyRole('ADMIN', 'TECNICO')")
     public Page<MaintenanceResponseDTO> getMaintenance(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "idMaintenance") String sortyBy,
+            @RequestParam(defaultValue = "DESC") Sort.Direction direction,
+            @RequestParam(required = false) Long idEquipment
 
-        return maintenanceService.obtenerMantenimientosPorPagina(page, size);
+    ) {
+
+        return maintenanceService.obtenerMantenimientosPorPagina(page, size, sortyBy, direction, idEquipment);
     }
     
     @Operation(summary = " método para obtener un mantenimiento con la id con la que se guardó en la DB")
