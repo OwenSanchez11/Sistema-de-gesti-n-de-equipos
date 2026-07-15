@@ -264,6 +264,73 @@ Gracias a este mecanismo, cualquier persona que ejecute el proyecto con una base
 | 401 | `InvalidCredentialesException` | Unauthorized | 
 | 400 | `Validation exception` | Validation error |
 
+
+## Funcionalidades Avanzadas de consultas
+
+La API incorpora funcionalidades para las consultas de información utilizando **Spring Data JPA** permitiendo obtener resultados flexibles, eficientes y escalables.
+### 📄 Paginación
+Permite consultar grandes volúmenes de información dividiendo los resultados en páginas.
+
+**Ejemplo:**
+
+```http
+GET /users?page=0&size=10
+```
+
+### 🔀 Ordenamiento dinámico
+
+Los resultados pueden ordenarse por cualquier atributo válido de la entidad, tanto de forma ascendente como descendente.
+
+**Ejemplo:**
+
+```http
+GET /users?sortBy=name&direction=ASC
+```
+
+---
+### 🔍 Filtros dinámicos con Spring Data JPA Specifications
+
+La API permite aplicar filtros opcionales mediante **Spring Data JPA Specifications**, evitando la necesidad de crear múltiples métodos en los repositorios para cada combinación posible de filtros.
+
+Actualmente se pueden realizar consultas como:
+
+```http
+GET /users?active=true
+```
+
+```http
+GET /users?email=ejemplo@admin.com
+```
+```http
+GET /equipment?name=Dell
+```
+
+```http
+GET /equipment?name=Dell&seriesNum=1001
+```
+
+```http
+GET /maintenance?idEquipment=3
+```
+
+Los filtros pueden combinarse libremente según las necesidades de la consulta.
+
+---
+
+### ⚡ Combinación de funcionalidades
+
+La paginación, el ordenamiento y los filtros dinámicos pueden utilizarse en una misma petición.
+
+**Ejemplo:**
+
+```http
+GET /users?page=0&size=10&sortBy=name&direction=ASC&active=true
+```
+
+Esta implementación proporciona una arquitectura escalable y fácil de mantener, permitiendo incorporar nuevos filtros sin modificar la estructura del repositorio ni crear múltiples métodos de consulta.
+
+
+
 ## Progreso del proyecto
 
 | Funcionalidad | Estado |
