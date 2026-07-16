@@ -11,6 +11,7 @@
   <li>PostgreSQL</li>
   <li>Maven</li>
 </ul>
+
 <h2>Estado Actual del proyecto</h2>
 
 <h3>Funcionalidades</h3>
@@ -93,30 +94,44 @@
   <li>Gestión centralizada de excepciones con `@RestControllerAdvice`</li>
 </ul>
 
+
+<h4>Seguridad y autenticación con JWT y Spring Security</h4>
+La API implementa un sistema de autenticación basado en **Spring Security** y **JSON Web Tokens (JWT)**, permitiendo proteger los recursos de la aplicación y controlar el acceso según el rol de cada usuario.
+<h5>¿Como funciona el proceso?</h5>
+Empezamos realizando la petición al siguiente endpoint, en donde el cliente le envía sus credenciales (`email` y `password`):
+
+```text
+Post /auth/login
+```
+
+aquí se envían el email y la contraseña del usuario, el controlador recibe esos datos y se los envía al servicio de autenticación
+el cual lo que hará es comparar los datos del usuario ingresado.
+<br>
+Dentro del service se utiliza la clase `AuthenticationManager` el cual es el encargado de verificar los datos ingresados, esa responsabilidad se la delego a Spring Security
+
+<ul>
+
+<li>Spring Security valida las credenciales, generando un JWT si las credenciales son correctas, este token contiene información del user como email, rol y el id en el sistema</li>
+<li>El token es devuelto al cliente para que pueda utilizarlo en las siguientes peticiones que desee realizar</li>
+</ul>
+
+
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "type": "Bearer"
+}
+```
+
+
+
+
 <h4>Documentación con swagger</h4>
 <ul>
     <li>Se agregó la documentación con swagger de los modelos y las excepciones que lanza cada método</li>
 </ul>
 
-## Configuración del proyecto
 
-Por seguridad, el archivo `application.properties` no está incluido en el repositorio.
-
-Para ejecutar el proyecto:
-
-1. Crear un archivo:
-
-```text
-application.properties
-```
-
-2. Usar como referencia:
-
-```text
-application-example.properties
-```
-
-3. Configurar tus propias credenciales de base de datos y variables JWT.
 
 
 ## 🔐 Autorización basada en roles
@@ -152,6 +167,28 @@ o
 Este enfoque permite separar la autenticación de la autorización, facilitando la administración de permisos y el mantenimiento del sistema.
 
 ---
+
+## Configuración del proyecto
+
+Por seguridad, el archivo `application.properties` no está incluido en el repositorio.
+
+Para ejecutar el proyecto:
+
+1. Crear un archivo:
+
+```text
+application.properties
+```
+
+2. Usar como referencia:
+
+```text
+application-example.properties
+```
+
+3. Configurar tus propias credenciales de base de datos y variables JWT.
+
+
 
 ## 🚀 Inicialización automática de la aplicación
 
