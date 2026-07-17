@@ -69,7 +69,7 @@ public class EquipmentService {
         equipment.setBrand(equip.getBrand());
         equipment.setModel(equip.getModel());
         equipment.setSeriesNum(equip.getSeriesNum());
-        equipment.setStatus(equip.getStatus());
+        equipment.setStatus(EquipmentStatus.AVAILABLE);
         equipment.setLocation(equip.getLocation());
         equipment.setActive(Boolean.TRUE);
 
@@ -82,7 +82,7 @@ public class EquipmentService {
     public EquipmentModel updateEquipment(EquipmentUpdateDTO request, Long idEquipment) {
         EquipmentModel equipment = EquipmentRepository.findById(idEquipment).get();
         equipment.setActive(request.getActive());
-        equipment.setStatus(request.getStatus());
+        equipment.setStatus(EquipmentStatus.AVAILABLE);
         
         return EquipmentRepository.save(equipment);
         

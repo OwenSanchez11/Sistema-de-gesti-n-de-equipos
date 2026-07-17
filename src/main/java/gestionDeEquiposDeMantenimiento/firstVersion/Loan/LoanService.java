@@ -5,6 +5,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Loan;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentRepository;
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentStatus;
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.BusinessRuleException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanCreateDTO;
@@ -17,6 +18,8 @@ import gestionDeEquiposDeMantenimiento.firstVersion.User.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,7 +58,8 @@ public class LoanService {
                  loan.getLoanDate(), loan.getLoanStatus());
     }
     
-    
+
+    @Transactional
     public LoanResponseDTO saveLoan(LoanCreateDTO request) {
         LoanModel loan = new LoanModel();
         
@@ -64,8 +68,8 @@ public class LoanService {
         UserModel userDeliverer = userRepository.findById(request.getIdUserDeliverer()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
   
 
-        if (!equipment.getActive()) {
-            throw new BusinessRuleException("Equipment inactive");
+        if (equipment.getStatus() != EquipmentStatus.AVAILABLE) {
+            throw new BusinessRuleException("The equipment is not available");
         }
         
         if (!userReceiver.getActive()) {
@@ -82,10 +86,11 @@ public class LoanService {
         loan.setLoanDate(LocalDateTime.now());
         loan.setObservationsOut(request.getObservationsOut());
         loan.setLoanStatus(LoanStatus.ACTIVE);
-        
-        equipment.setActive(Boolean.FALSE);
+
+        equipment.setStatus(EquipmentStatus.LOANED);
         equipmentRepository.save(equipment);
-            
+
+
         LoanModel loanSaved = loanRepository.save(loan);
         return mapToResponse(loanSaved);
        
@@ -98,7 +103,7 @@ public class LoanService {
                 LocalDateTime.now(), LoanStatus.ACTIVE);
     }
         
-   
+   @Transactional
     public LoanResponseDTO updateLoan(LoanUpdateDTO request, Long idLoan) {
         LoanModel loan = loanRepository.findById(idLoan).orElseThrow(() -> new ResourceNotFoundException("Loan not found"));
         EquipmentModel equipment = loan.getEquipment();
@@ -111,7 +116,7 @@ public class LoanService {
         loan.setReturnDate(LocalDateTime.now());
         loan.setObservationsReturn(request.getObservationsReturn());
         
-        equipment.setActive(Boolean.TRUE);
+        equipment.setStatus(EquipmentStatus.AVAILABLE);
         equipmentRepository.save(equipment);
         
         LoanModel loanSaved = loanRepository.save(loan);

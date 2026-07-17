@@ -36,11 +36,7 @@ public class UserService {
         spec = spec.and(UserSpecification.hasActive(active));
         spec = spec.and(UserSpecification.hasEmail(email));
 
-
         users = userRepository.findAll(spec, pageable);
-
-
-
 
         return users.map(this::mapToResponse);
 

@@ -6,28 +6,27 @@ import org.springframework.data.jpa.domain.Specification;
 public class UserSpecification {
 
     public static Specification<UserModel> hasActive(Boolean active) {
-        return (root, query, criteriaBuilder) ->{
 
-            if (active == null) {
-                return criteriaBuilder.conjunction();
-            }
+        if (active == null) {
+            return Specification.unrestricted();
+        }
 
-           return criteriaBuilder.equal(root.get("active"),active);
-        };
-
+        return (root, query, criteriaBuilder) ->
+            criteriaBuilder.equal(root.get("active"),active);
 
 
     }
 
     public static Specification<UserModel> hasEmail(String email) {
-        return (root, query, criteriaBuilder) -> {
 
-            if (email ==  null) {
-                return criteriaBuilder.conjunction();
-            }
+        if (email ==  null) {
+            return Specification.unrestricted();
+        }
 
-            return criteriaBuilder.equal(root.get("email"), email);
-        };
+        return (root, query, criteriaBuilder) ->
+
+            criteriaBuilder.equal(root.get("email"), email);
+
 
     }
 

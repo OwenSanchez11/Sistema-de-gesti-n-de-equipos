@@ -3,6 +3,7 @@ package gestionDeEquiposDeMantenimiento.firstVersion.Maintenance;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentRepository;
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentStatus;
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.BusinessRuleException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundException;
 import gestionDeEquiposDeMantenimiento.firstVersion.Maintenance.DTO.MaintenanceCreateDTO;
@@ -12,6 +13,8 @@ import gestionDeEquiposDeMantenimiento.firstVersion.User.UserRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -56,15 +59,15 @@ public class MaintenanceService {
     }
     
     
-    
+    @Transactional
     public MaintenanceResponseDTO saveMaintenance(MaintenanceCreateDTO request) {
         MaintenanceModel maintenance = new MaintenanceModel();
         EquipmentModel equipment = equipmentRepository.findById(request.getIdEquipment()).orElseThrow(() -> new ResourceNotFoundException("Equipment not found"));
         UserModel user = userRepository.findById(request.getIdUser()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
 
-        if (!equipment.getActive()) {
-            throw new BusinessRuleException("Equipment is inactive");
+        if (equipment.getStatus() != EquipmentStatus.AVAILABLE) {
+            throw new BusinessRuleException("The equipment is not available");
         }
         
         if (!user.getActive()) {
@@ -78,7 +81,8 @@ public class MaintenanceService {
         maintenance.setStartDate(LocalDate.now());
         maintenance.setMaintenanceStatus(MaintenanceStatus.IN_PROGRESS);
         maintenance.setPriceMaintenance(request.getPriceMaintenance());
-        equipment.setActive(Boolean.FALSE);
+
+        equipment.setStatus(EquipmentStatus.MAINTENANCE);
         equipmentRepository.save(equipment);
         
         MaintenanceModel maintenanceSaved = maintenanceRepository.save(maintenance);
@@ -100,14 +104,19 @@ public class MaintenanceService {
                 maintenance.getMaintenanceStatus()
         );
 }
-    
+    @Transactional
     public MaintenanceResponseDTO updateMaintenance(Long idMaintenance) {
         MaintenanceModel maintenance = maintenanceRepository.findById(idMaintenance).orElseThrow(() -> new ResourceNotFoundException("Maintenance Not Found"));
+
+        if (maintenance.getMaintenanceStatus() == MaintenanceStatus.COMPLETED) {
+            throw new BusinessRuleException("Maintenance has already been completed.");
+        }
+
         EquipmentModel equipment = maintenance.getEquipment();
         maintenance.setMaintenanceStatus(MaintenanceStatus.COMPLETED);
         maintenance.setEndDate(LocalDate.now());
         
-        equipment.setActive(Boolean.TRUE);
+        equipment.setStatus(EquipmentStatus.AVAILABLE);
         equipmentRepository.save(equipment);
 
         MaintenanceModel maintenanceSaved = maintenanceRepository.save(maintenance);

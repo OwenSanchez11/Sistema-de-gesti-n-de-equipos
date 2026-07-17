@@ -1,5 +1,6 @@
 package gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO;
 
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentStatus;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class EquipmentResponseDTO {
     private String brand;
     private String model;
     private int seriesNum;
-    private String status;
+    private EquipmentStatus status;
     private String location;
     private Boolean active;
 }
