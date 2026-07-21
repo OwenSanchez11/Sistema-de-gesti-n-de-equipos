@@ -81,8 +81,12 @@ public class EquipmentService {
     
     public EquipmentModel updateEquipment(EquipmentUpdateDTO request, Long idEquipment) {
         EquipmentModel equipment = EquipmentRepository.findById(idEquipment).get();
+
+        if (equipment.getStatus() == EquipmentStatus.MAINTENANCE || equipment.getStatus() == EquipmentStatus.LOANED) {
+            throw new BusinessRuleException("The equipment is being used");
+        }
+
         equipment.setActive(request.getActive());
-        equipment.setStatus(EquipmentStatus.AVAILABLE);
         
         return EquipmentRepository.save(equipment);
         

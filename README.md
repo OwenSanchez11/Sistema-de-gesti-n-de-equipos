@@ -220,7 +220,16 @@ Durante la inicialización:
 
 Gracias a este mecanismo, cualquier persona que ejecute el proyecto con una base de datos vacía podrá iniciar sesión inmediatamente utilizando las credenciales configuradas en `application.properties`, sin necesidad de realizar configuraciones adicionales o crear manualmente el primer usuario.
 
+### Testing
+Se implementaron pruebas unitarias usando JUnit y Mockito para validar la lógica de negocios de los servicios principales. hasta ahora las pruebas cubren LoanService y MaintenanceService: 
+<ul>
+<li>Casos éxitosos</li>
+<li>Validaciones de las reglas de negocio</li>
+<li>Excepciones cuando los recursos no existen</li>
+<li>Verificación de los cambios de estado de las entidades</li>
+</ul>
 
+Más adelante se irán agregando Tests unitarios de más funcionalidades.
 
 
 ## 📌 Main Endpoints

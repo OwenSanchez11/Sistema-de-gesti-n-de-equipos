@@ -51,11 +51,11 @@ public class LoanService {
         LoanModel loan = loanRepository.findById(idLoan).orElseThrow(() -> new ResourceNotFoundException("Loan not found"));
         
         return new LoanResponseDTO(loan.getIdLoan(), 
-                 loan.getEquipment().getIdEquipment(), 
-                 loan.getEquipment().getName(), 
-                 loan.getUserReceiver().getName(), loan.getUserDeliverer().getName(),loan.getObservationsOut(),
-                loan.getObservationsReturn(), 
-                 loan.getLoanDate(), loan.getLoanStatus());
+                loan.getEquipment().getIdEquipment(),
+                loan.getEquipment().getName(),
+                loan.getUserReceiver().getName(), loan.getUserDeliverer().getName(),loan.getObservationsOut(),
+                loan.getObservationsReturn(),
+                loan.getLoanDate(), loan.getLoanStatus());
     }
     
 
