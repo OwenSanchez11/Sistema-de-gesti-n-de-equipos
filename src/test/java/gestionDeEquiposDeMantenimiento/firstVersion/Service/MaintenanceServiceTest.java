@@ -168,7 +168,7 @@ public class MaintenanceServiceTest {
         when(maintenanceRepository.save(any(MaintenanceModel.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0  ));
 
-        MaintenanceResponseDTO response = maintenanceService.updateMaintenance(3L);
+        MaintenanceResponseDTO response = maintenanceService.updateMaintenance(maintenance.getIdMaintenance());
         assertNotNull(response);
         assertEquals(
                 EquipmentStatus.AVAILABLE,
@@ -188,8 +188,25 @@ public class MaintenanceServiceTest {
         when(maintenanceRepository.findById(maintenance.getIdMaintenance()))
                 .thenReturn(Optional.empty());
 
-        ResourceNotFoundException exception =  assertThrows(ResourceNotFoundException.class,() -> maintenanceService.updateMaintenance(3L));
+        ResourceNotFoundException exception =  assertThrows(ResourceNotFoundException.class,() -> maintenanceService.updateMaintenance(maintenance.getIdMaintenance()));
         assertEquals("Maintenance Not Found", exception.getMessage());
+        verify(maintenanceRepository, never()).save(any(MaintenanceModel.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenMaintenanceIsCompleted() {
+        MaintenanceModel maintenance = TestDataFactory.mainteanance();
+        maintenance.setMaintenanceStatus(MaintenanceStatus.COMPLETED);
+
+        when(maintenanceRepository.findById(maintenance.getIdMaintenance()))
+                .thenReturn(Optional.of(maintenance));
+
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> maintenanceService.updateMaintenance(maintenance.getIdMaintenance()));
+        assertEquals("Maintenance has already been completed.", exception.getMessage());
+        assertEquals(
+                EquipmentStatus.MAINTENANCE,
+                maintenance.getEquipment().getStatus()
+        );
         verify(maintenanceRepository, never()).save(any(MaintenanceModel.class));
     }
 

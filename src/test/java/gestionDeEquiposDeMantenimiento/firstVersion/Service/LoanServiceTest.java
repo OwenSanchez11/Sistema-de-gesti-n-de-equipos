@@ -8,8 +8,12 @@ import gestionDeEquiposDeMantenimiento.firstVersion.Exceptions.ResourceNotFoundE
 import gestionDeEquiposDeMantenimiento.firstVersion.Loan.LoanModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.Loan.LoanRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.Loan.LoanService;
+import gestionDeEquiposDeMantenimiento.firstVersion.Loan.LoanStatus;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanResponseDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.LoanDTO.LoanUpdateDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.Maintenance.DTO.MaintenanceResponseDTO;
+import gestionDeEquiposDeMantenimiento.firstVersion.Maintenance.MaintenanceModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.util.TestDataFactory;
@@ -47,8 +51,8 @@ public class LoanServiceTest {
         //Arrange
         LoanCreateDTO request = TestDataFactory.validLoanRequest();
         EquipmentModel equipment = TestDataFactory.availableEquipment();
-        UserModel userReceiver = TestDataFactory.activeUser(2L);
-        UserModel userDeliverer = TestDataFactory.activeUser(3L);
+        UserModel userReceiver = TestDataFactory.activeUser(request.getIdUserReceiver());
+        UserModel userDeliverer = TestDataFactory.activeUser(request.getIdUserDeliverer());
 
 
         when(equipmentRepository.findById(request.getIdEquipment()))
@@ -57,7 +61,7 @@ public class LoanServiceTest {
         when(userRepository.findById(request.getIdUserReceiver()))
                 .thenReturn(Optional.of(userReceiver));
 
-        when(userRepository.findById(request.getIdUserReceiver()))
+        when(userRepository.findById(request.getIdUserDeliverer()))
                 .thenReturn(Optional.of(userDeliverer));
 
 
@@ -195,7 +199,7 @@ public class LoanServiceTest {
 
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> loanService.saveLoan(request));
-        assertEquals("User not found", exception.getMessage());
+        assertEquals("User Not Found", exception.getMessage());
 
         verify(loanRepository, never()).save(any(LoanModel.class));
     }
@@ -225,5 +229,61 @@ public class LoanServiceTest {
         verify(loanRepository, never()).save(any(LoanModel.class));
     }
 
+
+
+    @Test
+    void shouldCompleteLoanSuccesfully() {
+        LoanUpdateDTO request = TestDataFactory.validLoanUpdateRequest();
+        LoanModel loan = TestDataFactory.loanRequestForUpdate();
+
+        when(loanRepository.findById(loan.getIdLoan()))
+                .thenReturn(Optional.of(loan));
+
+
+        when(loanRepository.save(any(LoanModel.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        LoanResponseDTO response = loanService.updateLoan(request, loan.getIdLoan());
+        assertNotNull(response);
+            assertEquals(
+                EquipmentStatus.AVAILABLE,
+                loan.getEquipment().getStatus()
+        );
+
+        verify(loanRepository).save(any(LoanModel.class));
+
+    }
+
+    @Test
+    void shouldThrowExceptionWhenLoanNotFound() {
+        LoanModel loan = TestDataFactory.loanRequestForUpdate();
+        LoanUpdateDTO request = TestDataFactory.validLoanUpdateRequest();
+
+        when(loanRepository.findById(loan.getIdLoan()))
+                .thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> loanService.updateLoan(request, loan.getIdLoan()));
+        assertEquals("Loan not found", exception.getMessage());
+        verify(loanRepository, never()).save(any(LoanModel.class));
+    }
+
+
+    @Test
+    void shouldThrowExceptionWhenLoanIsReturned() {
+        LoanModel loan = TestDataFactory.loanRequestForUpdate();
+        loan.setLoanStatus(LoanStatus.RETURNED);
+        LoanUpdateDTO request = TestDataFactory.validLoanUpdateRequest();
+
+        when(loanRepository.findById(loan.getIdLoan()))
+                .thenReturn(Optional.of(loan));
+
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> loanService.updateLoan(request, loan.getIdLoan()));
+        assertEquals("Loan already returned", exception.getMessage());assertEquals(
+                EquipmentStatus.LOANED,
+                loan.getEquipment().getStatus()
+        );
+
+        verify(loanRepository, never()).save(any(LoanModel.class));
+    }
 
 }

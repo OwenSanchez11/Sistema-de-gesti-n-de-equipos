@@ -57,7 +57,7 @@ public class UserService {
     public UserResponseDTO saveUser(UserCreateDTO request) {
 
         RolModel rol = rolRepository.findById(request.getIdRol())
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado"));
         UserModel user = new UserModel();
         user.setActive(Boolean.TRUE);
         user.setCargo(request.getCargo());
@@ -106,7 +106,7 @@ public class UserService {
     public UserModel editarUser(UserUpdateDTO request, Long idUser) {
         UserModel user = userRepository.findById(idUser).get();
         RolModel rol = rolRepository.findById(request.getIdRol())
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado"));
         
         boolean emailExist = userRepository.existsByEmail(request.getEmail());
         
@@ -118,6 +118,7 @@ public class UserService {
         user.setCargo(request.getCargo());
         user.setEmail(request.getEmail());
         user.setName(request.getName());
+        user.setPhoneNumber(request.getPhoneNumber());
         user.setRol(rol);
 
         return userRepository.save(user);

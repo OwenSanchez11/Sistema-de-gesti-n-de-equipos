@@ -1,6 +1,7 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO;
 
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +19,4 @@ public class EquipmentUpdateDTO {
         example = "true/false")
     private Boolean active;
 
-    @Schema(
-        description = "Nuevo estado físico u operativo del equipo",
-        example = "MANTENIMIENTO, ACTIVO, EN PROGRESO")
-    private String status;
 }

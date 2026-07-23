@@ -1,81 +1,50 @@
-<h1>Sistema de gestión de equipos</h1>
-<p>Backend de un sistema de gestión de activos tecnológicos desarrollado con Java y Spring Boot. El objetivo del proyecto es centralizar 
-  el control de equipos, usuarios y roles dentro de una organización, permitiendo en futuras versiones la gestión de préstamos, 
-  mantenimientos y trazabilidad de los activos. El proyecto implementa una arquitectura RESTful, persistencia con una base de datos PostgreSQL y buenas prácticas de desarrollo backend.
+# 💻Sistema de gestión de prestamos y mantenimientos de equipos 
+Backend de un sistema de gestión de activos tecnológicos desarrollado con 
+**Java** y **Spring Boot**. El objetivo del proyecto es centralizar el control 
+de equipos, usuarios y roles dentro de una organización, gestionando préstamos, mantenimientos y trazabilidad de los activos. El proyecto implementa una arquitectura RESTful, persistencia con PostgreSQL y buenas prácticas de desarrollo backend.
+
+
+---
+
+## 📑 Tabla de contenidos
+
+- [Tecnologías usadas](#-tecnologías-usadas)
+- [Modelo de la base de datos](#-modelo-de-la-base-de-datos)
+- [Funcionalidades](#-funcionalidades)
+- [Seguridad y autenticación (JWT)](#-seguridad-y-autenticación-con-jwt-y-spring-security)
+- [Autorización basada en roles](#-autorización-basada-en-roles)
+- [Documentación con Swagger](#-documentación-con-swagger)
+- [Configuración del proyecto](#-configuración-del-proyecto)
+- [Inicialización automática](#-inicialización-automática-de-la-aplicación)
+- [Testing](#-testing)
+- [Endpoints principales](#-main-endpoints)
+- [Manejo de errores](#-api-error-handling)
+- [Funcionalidades avanzadas de consulta](#funcionalidades-avanzadas-de-consultas)
+- [Progreso del proyecto](#-progreso-del-proyecto)
+- [Autor](#-autor)
+---
+
+
+## 🧰 Tecnologías usadas
+- Java
+- Spring Boot
+- Spring Data JPA
+- Spring Security
+- PostgreSQL
+- Maven
+
+
+---
+
+## 🗂 Modelo de la base de datos
+
+**Entidades principales:** `Role`, `User`, `Equipment`, `Loan`, `Maintenance`
+
+
+<p align="center">
+  <img src="./screenshots/entidad%20relacion%20db.png" width="900">
 </p>
-<h3>Tecnologías usadas</h3>
-<ul>
-  <li>JAVA</li>
-  <li>Spring boot</li>
-  <li>Spring Data JPA</li>
-  <li>PostgreSQL</li>
-  <li>Maven</li>
-</ul>
 
-<h2>Estado Actual del proyecto</h2>
-
-<h3>Funcionalidades</h3>
-<h4>Gestión de usuarios</h4>
-<ul>
-  <li>Consultar usuarios</li>
-  <li>Crear Usuarios</li>
-  <li>Actualizar Usuario</li>
-  <li>Eliminar Usuarios</li>
-</ul>
-
-<h4>Gestión de Roles</h4>
-<ul>
-  <li>Consultar roles</li>
-  <li>Crear roles</li>
-  <li>Actualizar roles</li>
-  <li>Eliminar roles</li>
-</ul>
-
-<h4>Gestión de Equipos</h4>
-<ul>
-  <li>Consultar equipos</li>
-  <li>Registrar equipos</li>
-  <li>Actualizar equipos</li>
-  <li>Eliminar equipos</li>
-</ul>
-
-<h4>Gestión de Prestamos</h4>
-<ul>
-  <li>Registrar préstamos de equipos</li>
-  <li>Consultar historial de préstamos</li>
-  <li>Consultar préstamo por ID</li>
-  <li>Estados del préstamo:
-  <ul>
-    <li>ACTIVE</li>
-    <li>RETURNED</li>
-    <li>CANCELLED</li>
-  </ul>
-  </li>
-</ul>
-
-<h4>Gestión de Mantenimiento</h4>
-<ul>
-  <li>Consultar Mantenimientos</li>
-  <li>Registrar Mantenimientos</li>
-  <li>Actualizar estado del Mantenimientos</li>
-  <li>Estados del Mantenimiento:
-  <ul>
-    <li>IN_PROGRESS</li>
-    <li>COMPLETED</li>
-    <li>CANCELLED</li>
-  </ul>
-  </li>
-</ul>
-
-<h4>Modelo de la DB</h4>
-<span>Entidades principales</span>
-<ul>
-  <li>Role</li>
-  <li>User</li>
-  <li>Equipment</li>
-  <li>Loan</li>
-  <li>Maintenance</li>
-</ul>
 
 <h5>Relaciones</h5>
 <ul>
@@ -87,52 +56,65 @@
   <li>User 1 → N Maintenance (Register)</li>
 </ul>
 
-<h4>Manejo de excepciones globales</h4>
-<ul>
-  <li>Excepciones personalizadas para la lógica de negocio y recursos faltantes</li>
-  <li>Respuestas de error HTTP estandarizadas(404,500,409)</li>
-  <li>Gestión centralizada de excepciones con `@RestControllerAdvice`</li>
-</ul>
+---
 
+## ⚙️ Funcionalidades
 
-<h4>Seguridad y autenticación con JWT y Spring Security</h4>
+### Gestión de usuarios
+- Consultar usuarios
+- Crear usuarios
+- Actualizar usuario
+- Eliminar usuarios
+### Gestión de roles
+- Consultar roles
+- Crear roles
+- Actualizar roles
+- Eliminar roles
+### Gestión de equipos
+- Consultar equipos
+- Registrar equipos
+- Actualizar equipos
+- Eliminar equipos
+### Gestión de préstamos
+- Registrar préstamos de equipos
+- Consultar historial de préstamos
+- Consultar préstamo por ID
+- Estados del préstamo: `ACTIVE`, `RETURNED`, `CANCELLED`
+### Gestión de mantenimiento
+- Consultar mantenimientos
+- Registrar mantenimientos
+- Actualizar estado del mantenimiento
+- Estados del mantenimiento: `IN_PROGRESS`, `COMPLETED`, `CANCELLED`
+### Manejo de excepciones globales
+- Excepciones personalizadas para la lógica de negocio y recursos faltantes
+- Respuestas de error HTTP estandarizadas (404, 409, 500)
+- Gestión centralizada de excepciones con `@RestControllerAdvice`
+---
+
+## 🔐 Seguridad y autenticación con JWT y Spring Security
+
 La API implementa un sistema de autenticación basado en **Spring Security** y **JSON Web Tokens (JWT)**, permitiendo proteger los recursos de la aplicación y controlar el acceso según el rol de cada usuario.
-<h5>¿Como funciona el proceso?</h5>
-Empezamos realizando la petición al siguiente endpoint, en donde el cliente le envía sus credenciales (`email` y `password`):
 
-```text
-Post /auth/login
+### ¿Cómo funciona el proceso?
+
+Se realiza la petición al siguiente endpoint, enviando las credenciales (`email` y `password`):
+
+
+```
+POST /auth/login
 ```
 
-aquí se envían el email y la contraseña del usuario, el controlador recibe esos datos y se los envía al servicio de autenticación
-el cual lo que hará es comparar los datos del usuario ingresado.
-<br>
-Dentro del service se utiliza la clase `AuthenticationManager` el cual es el encargado de verificar los datos ingresados, esa responsabilidad se la delego a Spring Security
+El controlador recibe esos datos y los envía al servicio de autenticación, el cual utiliza la clase `AuthenticationManager` para delegar la verificación de credenciales a Spring Security.
 
-<ul>
-
-<li>Spring Security valida las credenciales, generando un JWT si las credenciales son correctas, este token contiene información del user como email, rol y el id en el sistema</li>
-<li>El token es devuelto al cliente para que pueda utilizarlo en las siguientes peticiones que desee realizar</li>
-</ul>
-
-
+- Spring Security valida las credenciales y genera un JWT si son correctas. El token contiene información del usuario como email, rol e id en el sistema.
+- El token es devuelto al cliente para que pueda utilizarlo en las siguientes peticiones.
 ```json
 {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
     "type": "Bearer"
 }
+
 ```
-
-
-
-
-<h4>Documentación con swagger</h4>
-<ul>
-    <li>Se agregó la documentación con swagger de los modelos y las excepciones que lanza cada método</li>
-</ul>
-
-
-
 
 ## 🔐 Autorización basada en roles
 
@@ -168,26 +150,56 @@ Este enfoque permite separar la autenticación de la autorización, facilitando 
 
 ---
 
-## Configuración del proyecto
+
+## 📃 Documentación con swagger
+
+## Vista general
+
+![Vista General](./screenshots/documentación%20swagger.png)
+
+---
+
+## Login
+
+![Login](./screenshots/auth-swagger.png)
+![Login](./screenshots/auth-swagger2.png)
+
+---
+
+## Crear equipo
+
+![Crear Equipo](./screenshots/Post%20-%20equipment.png)
+![Crear Equipo](./screenshots/Post%20-%20equipment2.png)
+
+
+---
+
+## Obtener usuarios
+
+![Obtener Usuarios](./screenshots/get%20-%20users.png)
+![Obtener Usuarios](./screenshots/get%20-%20users2.png)
+![Obtener Usuarios](./screenshots/get%20-%20users3.png)
+
+
+
+---
+
+## ⚙️ Configuración del proyecto
 
 Por seguridad, el archivo `application.properties` no está incluido en el repositorio.
 
 Para ejecutar el proyecto:
 
-1. Crear un archivo:
-
-```text
-application.properties
+1. Clona el repositorio y ubícate en la raíz del proyecto.
+2. Crea un archivo `application.properties`.
+3. Usa como referencia `application-example.properties`.
+4. Configura tus propias credenciales de base de datos y variables JWT.
+5. Ejecuta el proyecto:
+```bash
+./mvnw spring-boot:run
 ```
-
-2. Usar como referencia:
-
-```text
-application-example.properties
-```
-
-3. Configurar tus propias credenciales de base de datos y variables JWT.
-
+ 
+---
 
 
 ## 🚀 Inicialización automática de la aplicación
@@ -220,16 +232,15 @@ Durante la inicialización:
 
 Gracias a este mecanismo, cualquier persona que ejecute el proyecto con una base de datos vacía podrá iniciar sesión inmediatamente utilizando las credenciales configuradas en `application.properties`, sin necesidad de realizar configuraciones adicionales o crear manualmente el primer usuario.
 
-### Testing
-Se implementaron pruebas unitarias usando JUnit y Mockito para validar la lógica de negocios de los servicios principales. hasta ahora las pruebas cubren LoanService y MaintenanceService: 
-<ul>
-<li>Casos éxitosos</li>
-<li>Validaciones de las reglas de negocio</li>
-<li>Excepciones cuando los recursos no existen</li>
-<li>Verificación de los cambios de estado de las entidades</li>
-</ul>
+## 🧪 Testing
 
-Más adelante se irán agregando Tests unitarios de más funcionalidades.
+Se implementaron pruebas unitarias usando JUnit y Mockito para validar la lógica de negocio de los servicios principales. Hasta ahora las pruebas cubren `LoanService` y `MaintenanceService`:
+
+- Casos exitosos
+- Validaciones de las reglas de negocio
+- Excepciones cuando los recursos no existen
+- Verificación de los cambios de estado de las entidades
+  Más adelante se irán agregando tests unitarios de más funcionalidades.
 
 
 ## 📌 Main Endpoints
@@ -375,12 +386,12 @@ GET /users?page=0&size=10&sortBy=name&direction=ASC&active=true
 
 Esta implementación proporciona una arquitectura escalable y fácil de mantener, permitiendo incorporar nuevos filtros sin modificar la estructura del repositorio ni crear múltiples métodos de consulta.
 
+---
 
-
-## Progreso del proyecto
+## 📊 Progreso del proyecto
 
 | Funcionalidad | Estado |
-|--------------|--------|
+|---|---|
 | CRUD completo | ✅ Completado |
 | DTOs | ✅ Completado |
 | Manejo de excepciones | ✅ Completado |
@@ -390,11 +401,15 @@ Esta implementación proporciona una arquitectura escalable y fácil de mantener
 | Validación de JWT | ✅ Completado |
 | Configuración Spring Security | ✅ Completado |
 | Autorización por roles | ✅ Completado |
+| Tests de integración | ⏳ Planeado |
+| Migraciones con Flyway/Liquibase | ⏳ Planeado |
 | Docker | ⏳ Planeado |
 | Deploy | ⏳ Planeado |
 
+Este proyecto continúa evolucionando con el objetivo de implementar una API backend segura, escalable y alineada con buenas prácticas de desarrollo profesional.
+ 
+---
 
-<p>Este proyecto continúa evolucionando con el objetivo de implementar una API backend segura, escalable y alineada con buenas prácticas de desarrollo profesional.</p>
+## 👤 Autor
 
-<h3>Autor</h3>
-Owen Sanchez - Backend Developer en formación enfocado en Java, Spring Boot y PostgreSQL.
+**Owen Sanchez** - Backend Developer en formación enfocado en Java, Spring Boot y PostgreSQL.

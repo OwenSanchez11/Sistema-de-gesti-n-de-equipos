@@ -1,6 +1,7 @@
 
 package gestionDeEquiposDeMantenimiento.firstVersion.Equipment.DTO;
 
+import gestionDeEquiposDeMantenimiento.firstVersion.Equipment.EquipmentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -65,15 +66,6 @@ public class EquipmentCreateDTO {
     @NotNull(message = "Series number cannot be empty")
     @Positive(message = "Series number must be greater than 0")
     private Integer seriesNum;
-
-    @Schema(
-        description = "Estado físico/operativo inicial del equipo",
-        example = "DISPONIBLE",
-        allowableValues = {"DISPONIBLE", "MANTENIMIENTO", "DEBAJA"}, // Modifica según tus estados de negocio
-        requiredMode = Schema.RequiredMode.REQUIRED
-    )
-    @NotBlank(message = "status cannot be empty")
-    private String status;
 
     @Schema(
         description = "Ubicación física actual o almacén donde se resguarda el equipo",
