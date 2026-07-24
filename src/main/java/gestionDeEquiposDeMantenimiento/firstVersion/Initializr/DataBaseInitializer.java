@@ -1,6 +1,7 @@
 package gestionDeEquiposDeMantenimiento.firstVersion.Initializr;
 
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolModel;
+import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolName;
 import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserModel;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.UserRepository;
@@ -33,18 +34,24 @@ public class DataBaseInitializer implements CommandLineRunner {
 
     private void initializeRole() {
 
-        if (!rolRepository.existsByName("ADMIN")) {
-            RolModel rol = new RolModel();
-            rol.setName("ADMIN");
+        createRoleIfNotExists(RolName.ADMIN);
+        createRoleIfNotExists(RolName.TECNICO);
 
-            rolRepository.save(rol);
+    }
 
+    private void createRoleIfNotExists(RolName roleName) {
+
+        if (!rolRepository.existsByName(roleName)) {
+            RolModel role = new RolModel();
+            role.setName(roleName);
+            rolRepository.save(role);
         }
+
     }
 
     private void initializeAdminUser() {
 
-        RolModel adminRole = rolRepository.findByName("ADMIN")
+        RolModel adminRole = rolRepository.findByName(RolName.ADMIN)
                 .orElseThrow(() -> new IllegalStateException("El rol ADMIN no existe."));
 
         if (!userRepository.existsByEmail(adminEmail)) {

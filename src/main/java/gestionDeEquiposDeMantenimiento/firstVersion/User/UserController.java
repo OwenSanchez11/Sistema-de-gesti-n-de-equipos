@@ -130,7 +130,7 @@ public class UserController {
     @PutMapping(path = "/{idUser}")
     @PreAuthorize("hasRole('ADMIN')")
     public UserModel editarUser(@Valid @RequestBody UserUpdateDTO request, @PathVariable Long idUser) {
-        return userService.editarUser(request, idUser);
+        return userService.updateUser(request, idUser);
     }
     
     @Operation(summary = "método para eliminar usuarios de la DB")

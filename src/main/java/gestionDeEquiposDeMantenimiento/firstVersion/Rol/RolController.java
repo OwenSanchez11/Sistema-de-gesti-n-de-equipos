@@ -72,54 +72,7 @@ public class RolController {
         return rolService.getRolById(idRol);
     }
     
-    @Operation(summary = "método para crear y guardar roles dentro de la DB")
-    @ApiResponses(value = {
-        @ApiResponse( 
-            responseCode = "200",
-            description = "Rol creado exitosamente"
-        ),
-        @ApiResponse( 
-            responseCode = "409",
-            description = "Ya existe el rol con ese nombre"
-        ),
-    
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponse.class)
-        )),
-    })
-    @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public RolModel saveRol(@RequestBody RolCreateDTO request) {
-        return rolService.saveRol(request);
-    }
-    
-    @Operation(summary = "método para actualizar o editar los roles en la DB")
-    @ApiResponses(value = {
-        @ApiResponse( 
-            responseCode = "200",
-            description = "Rol creado exitosamente"
-        ),
-        @ApiResponse( 
-            responseCode = "409",
-            description = "Ya existe el rol con ese nombre"
-        ),
-    
-        @ApiResponse(
-            responseCode = "500",
-            description = "Internal Server Error",
-            content = @Content(
-                schema = @Schema(implementation = ErrorResponse.class)
-        )),
-    })
-    @PutMapping(path = "/{idRol}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public RolModel updateRol(@RequestBody RolUpdateDTO request, @PathVariable Long idRol) {
-        return rolService.updateRol(request, idRol);
-    }
-    
+
     @Operation(summary = "método para borrar roles dentro de la DB")
         @ApiResponses(value = {
         @ApiResponse(

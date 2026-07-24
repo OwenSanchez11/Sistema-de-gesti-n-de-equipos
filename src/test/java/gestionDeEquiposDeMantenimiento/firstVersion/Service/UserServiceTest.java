@@ -146,7 +146,7 @@ public class UserServiceTest {
                 .thenAnswer(invocation -> invocation.getArgument(0)
                 );
 
-        UserModel response = userService.editarUser(request, user.getIdUsuario());
+        UserModel response = userService.updateUser(request, user.getIdUsuario());
 
         assertNotNull(response);
         assertEquals(request.getName(), response.getName());
@@ -180,7 +180,7 @@ public class UserServiceTest {
         when(userRepository.existsByEmail(request.getEmail()))
                 .thenReturn(true);
 
-        BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> userService.editarUser(request, user.getIdUsuario()));
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> userService.updateUser(request, user.getIdUsuario()));
         assertEquals("A user with this email already exist", exception.getMessage());
 
         verify(userRepository, never()).save(any(UserModel.class));

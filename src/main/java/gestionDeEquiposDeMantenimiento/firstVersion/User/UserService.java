@@ -8,7 +8,6 @@ import gestionDeEquiposDeMantenimiento.firstVersion.Rol.RolRepository;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserResponseDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserCreateDTO;
 import gestionDeEquiposDeMantenimiento.firstVersion.User.DTO.UserUpdateDTO;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -103,7 +102,7 @@ public class UserService {
     }
     
     
-    public UserModel editarUser(UserUpdateDTO request, Long idUser) {
+    public UserModel updateUser(UserUpdateDTO request, Long idUser) {
         UserModel user = userRepository.findById(idUser).get();
         RolModel rol = rolRepository.findById(request.getIdRol())
                 .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado"));
